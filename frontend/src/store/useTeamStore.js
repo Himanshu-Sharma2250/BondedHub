@@ -27,6 +27,7 @@ export const useTeamStore = create((set) => ({
             const res = await axiosInstance.get(`/team/get-team/${teamId}`);
 
             set({team: res.data.team})
+            return res.data.team
         } catch (error) {
             console.error("Error fetching team: ", error);
         } finally {

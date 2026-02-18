@@ -62,22 +62,22 @@ const MyProfile = () => {
                     {/* user profile image */}
                     <div className='flex items-center'>
                         <span className='p-5 bg-cyan-800'>
-                            {user.fullName.toUpperCase().slice(0,1)}
+                            {user?.fullName?.toUpperCase().slice(0,1)}
                         </span>
                     </div>
 
                     {/* page header */}
                     <div className='flex flex-col'>
                         <h1 className='text-xl '>
-                            {user.fullName}
+                            {user?.fullName}
                         </h1>
 
                         <span className='text-gray-400 text-[14px]'>
-                           {user.name}
+                           {user?.name}
                         </span>
 
                         <span className='text-gray-400 text-[13px]'>
-                            {user.email}
+                            {user?.email}
                         </span>
                     </div>
                 </div>

@@ -2,12 +2,13 @@ import { Loader2, Users } from 'lucide-react'
 import toast from 'react-hot-toast'
 import Button from './Button'
 import { useApplicationStore } from '../store/useApplicationStore'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useTeamStore } from '../store/useTeamStore'
 
 const SentApplications = () => {
+    const [teamsMap, setTeamsMap] = useState({});
     const {getApplications, isGetting, applications, withdrawApplication} = useApplicationStore();
-    const {getTeam, team} = useTeamStore();
+    const {getTeam} = useTeamStore();
 
     useEffect(() => {
         function fetchApplications() {
@@ -16,12 +17,43 @@ const SentApplications = () => {
         fetchApplications();
     }, [])
 
+    useEffect(() => {
+        const fetchTeamsForApplications = async () => {
+        // Get unique team IDs from applications (ignore empty or undefined)
+        const teamIds = [...new Set(applications.map(app => app.teamId).filter(Boolean))];
+            
+        if (teamIds.length === 0) return;
+
+        // Fetch each team in parallel
+        try {
+            const teamPromises = teamIds.map(id =>
+                getTeam(id)
+            );
+            const teamsData = await Promise.all(teamPromises);
+
+            // Build a map from teamId to team data
+            const newTeamsMap = teamsData.reduce((acc, team) => {
+                acc[team._id] = team;
+                return acc;
+            }, {});
+
+            setTeamsMap(newTeamsMap);
+            } catch (error) {
+                console.error('Error fetching teams:', error);
+                toast.error('Could not load group details');
+            }
+        };
+
+        if (applications.length > 0) {
+            fetchTeamsForApplications();
+        }
+    }, [applications]); // runs when applications change
+
     if (isGetting) {
         return <div className='m-auto'>
             <Loader2 className='w-5 animate-spin' />
         </div>
     }
-    console.log(applications)
 
     const onWithdraw = (applicationId) => {
         try {
@@ -33,8 +65,7 @@ const SentApplications = () => {
     }
 
     const createApplicationCards = (application) => {
-        // (async () => { await getTeam(application.teamId); })();
-        console.log(team)
+        const team = teamsMap[application?.teamId];
 
         return <div className='flex flex-col px-2 py-2 border-2 w-full gap-3 justify-between' key={application?._id}>
             {/* div 1 - contains group name and if applications is pending or rejected or approved */}

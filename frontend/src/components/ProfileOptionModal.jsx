@@ -29,7 +29,7 @@ const ProfileOptionModal = ({isCollapsed}) => {
         <div className='relative'>
             <button className={`w-full flex gap-2 items-center transition-all duration-200 active:scale-95 hover:opacity-90 cursor-pointer py-1 ${isCollapsed ? '' : 'pr-42'}`} onClick={openModal}>
                 <User className={`w-5`}/>
-                {!isCollapsed && <span className='text-[17px]'>{user.fullName}</span>}
+                {!isCollapsed && <span className='text-[17px]'>{user.name}</span>}
             </button>
 
             <dialog 
