@@ -204,3 +204,32 @@ export const getAllApplication = async (req, res) => {
         })
     }
 }
+
+// get only received applications
+export const getAllReceivedApplications = async (req, res) => {
+    try {
+        const applications = await Application.find({
+            decidedBy: req.user._id,
+            status: "PENDING"
+        })
+
+        if (!applications) {
+            return res.status(404).json({
+                success: false,
+                message: 'Applications not found'
+            })
+        }
+
+        res.status(200).json({
+            success: true,
+            message: "All applications fetched successfully",
+            applications: applications
+        })
+    } catch (error) {
+        console.error("Error fetching applications: ", error);
+        res.status(500).json({
+            success: false,
+            message: "Error fetching applications"
+        })
+    }
+}

@@ -280,7 +280,6 @@ export const getAllTeamMembers = async (req, res) => {
 
 // create owner of team
 export const createOwner = async (req, res) => {
-    console.log("started")
     const userId = req.user._id;
     const {teamId} = req.params;
     const {data, error} = joinTeamSchema.safeParse(req.body);
@@ -292,7 +291,7 @@ export const createOwner = async (req, res) => {
         })
     }
 
-    const {name, email, reasonToJoin} = data;
+    const {name, email} = data;
 
     try {
         // check if user is owner
@@ -313,7 +312,7 @@ export const createOwner = async (req, res) => {
             teamId: teamId,
             name: name,
             email: email,
-            reasonToJoin: reasonToJoin,
+            reasonToJoin: "",
             teamRole: 'LEADER'
         })
 
