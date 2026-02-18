@@ -4,16 +4,7 @@ import { useTeamMemberStore } from '../store/useTeamMemberStore';
 import { useEffect, useState } from 'react';
 import { Loader2 } from 'lucide-react';
 
-const GroupMembers = ({teamId}) => {
-    const {isGetting, getTeamMembers, members} = useTeamMemberStore();
-
-    useEffect(() => {
-        function fetchTeamMembers() {
-            getTeamMembers(teamId)
-        }
-        fetchTeamMembers();
-    }, [])
-
+const GroupMembers = ({members}) => {
     const teamLeader = members?.find((member) => member.teamRole !== "MEMBER")
     const teamMembers = members?.map((member) => member.teamRole === "MEMBER")
 
@@ -87,9 +78,8 @@ const GroupMembers = ({teamId}) => {
                     Group Leader
                 </h1>
 
-                {isGetting ? (<Loader2 className='w-5 animate-spin' />) : (
-                    createLeaderCard()
-                )}
+                
+                {createLeaderCard()}
             </div>
 
             {/* div 2 - shows Group Members */}
@@ -98,7 +88,11 @@ const GroupMembers = ({teamId}) => {
                     Members {members?.length-1}
                 </h1>
 
-                {teamMembers.map((member) => createMemberCards(member))}
+                {members.length === 1 ? (
+                    <span>
+                        No members joined
+                    </span>
+                ) : (teamMembers.map((member) => createMemberCards(member)))}
             </div>
         </div>
     )

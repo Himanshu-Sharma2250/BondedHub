@@ -2,10 +2,11 @@ import { NavLink } from 'react-router-dom';
 import { useRef } from 'react';
 import { User, Moon, Sun } from 'lucide-react';
 import { useAuthStore } from '../store/useAuthStore';
+import toast from 'react-hot-toast';
 
 const ProfileOptionModal = ({isCollapsed}) => {
     const dialogRef = useRef(null);
-    const {user} = useAuthStore();
+    const {user, logout} = useAuthStore();
     
     const openModal = () => {
         dialogRef.current?.showModal();
@@ -15,11 +16,20 @@ const ProfileOptionModal = ({isCollapsed}) => {
         dialogRef.current?.close();
     };
 
+    const onLogout = () => {
+        try {
+            logout();
+            toast.success("Logout successfull")
+        } catch (error) {
+            toast.error("Error in logout")
+        }
+    }
+
     return (
         <div className='relative'>
             <button className={`w-full flex gap-2 items-center transition-all duration-200 active:scale-95 hover:opacity-90 cursor-pointer py-1 ${isCollapsed ? '' : 'pr-42'}`} onClick={openModal}>
                 <User className={`w-5`}/>
-                {!isCollapsed && <span className='text-[17px]'>Username</span>}
+                {!isCollapsed && <span className='text-[17px]'>{user.fullName}</span>}
             </button>
 
             <dialog 
@@ -48,7 +58,7 @@ const ProfileOptionModal = ({isCollapsed}) => {
                     <Moon className='w-4' />
                 </span>
 
-                <span className='hover:bg-red-300 px-2'>
+                <span className='hover:bg-red-300 px-2' onClick={onLogout}>
                     Log Out
                 </span>
             </dialog>

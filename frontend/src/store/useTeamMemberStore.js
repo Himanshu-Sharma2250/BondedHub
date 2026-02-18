@@ -70,11 +70,11 @@ export const useTeamMemberStore = create((set) => ({
         }
     },
 
-    createTeamOwner: async (teamId) => {
+    createTeamOwner: async (teamId, data) => {
         set({isJoining: true});
 
         try {
-            await axiosInstance.post(`/team/${teamId}/owner`);
+            await axiosInstance.post(`/team/${teamId}/owner`, data);
         } catch (error) {
             console.log("Error creating team owner: ", error);
         } finally {

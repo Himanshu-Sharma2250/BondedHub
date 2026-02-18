@@ -1,6 +1,10 @@
-import React from 'react'
+import React, { useState } from 'react'
 
-const GroupOverview = ({team}) => {
+const GroupOverview = ({team, members}) => {
+    const [teamLeader, setTeamLeader] = useState(null)
+    const leader = members.filter((member) => member?.teamRole === 'LEADER')
+
+
     return (
         <div className='border-2 px-2 flex flex-col gap-5 rounded-xs py-3'>
             {/* div 1 - about group's creation (reason) */}
@@ -39,7 +43,7 @@ const GroupOverview = ({team}) => {
                     {/* Group's Leader */}
                     <div className='flex justify-between px-2 '>
                         <span>
-                            Group Leader
+                            {leader?.name}
                         </span>
 
                         <span>

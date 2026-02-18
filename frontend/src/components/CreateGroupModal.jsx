@@ -6,6 +6,7 @@ import z from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader2 } from 'lucide-react';
 import { useTeamMemberStore } from '../store/useTeamMemberStore';
+import { useAuthStore } from '../store/useAuthStore';
 
 const createTeamSchema = z.object({
     name: z.string().trim(),
@@ -21,6 +22,7 @@ const CreateGroupModal = () => {
 
     const {createTeam, loading, team} = useTeamStore();
     const {createTeamOwner} = useTeamMemberStore();
+    const {user} = useAuthStore();
 
     // reference to the dialog element
     const dialogRef = useRef(null);
@@ -36,7 +38,7 @@ const CreateGroupModal = () => {
     const onCreateTeam = async (data) => {
         createTeam(data);
         console.log(data)
-        createTeamOwner(team._id)
+        createTeamOwner(team._id, {name: user?.name, email: user?.email})
     }
 
     return (

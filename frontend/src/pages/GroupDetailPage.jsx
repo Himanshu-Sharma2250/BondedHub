@@ -18,12 +18,13 @@ const GroupDetailPage = () => {
     const {teamId} = useParams()
     const {team, loading, getTeam} = useTeamStore();
     const {user} = useAuthStore();
-    const {getTeamMember, member} = useTeamMemberStore();
+    const {getTeamMember, member, getTeamMembers, members} = useTeamMemberStore();
 
     useEffect(() => {
         function fetchTeam() {
             getTeam(teamId)
             getTeamMember(teamId, user._id)
+            getTeamMembers(teamId)
         }
         fetchTeam();
     }, [])
@@ -109,10 +110,10 @@ const GroupDetailPage = () => {
 
             {/* div 2 - shows the respective detail of above navigation btns */}
             {selectedTab === 'Overview' ? (
-                <GroupOverview team={team} />
+                <GroupOverview team={team} members={members} />
             ) : (
                 selectedTab === 'Members' ? (
-                    <GroupMembers teamId={team?._id} />
+                    <GroupMembers members={members} />
                 ) : (
                     selectedTab === 'Notes' ? (
                         <GroupNotes teamId={team?._id} />
