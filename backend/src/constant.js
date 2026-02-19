@@ -17,6 +17,7 @@ export const availableTeamRoles = Object.values(TeamRolesEnum);
 export const TeamMemberAction = {
     JOINED: "JOINED",
     LEFT: "LEFT",
+    CREATED: "CREATED",
     KICKED_OUT: "KICKED_OUT"
 }
 

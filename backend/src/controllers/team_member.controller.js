@@ -1,6 +1,6 @@
 import { Team } from "../models/team.model.js";
 import { TeamMember } from "../models/team_member.model.js";
-import { joinTeamSchema } from "../validators/team.validator.js";
+import { joinTeamSchema, teamOwnerSchema } from "../validators/team.validator.js";
 
 // join a team - create team member
 export const joinTeam = async (req, res) => {
@@ -42,12 +42,22 @@ export const joinTeam = async (req, res) => {
             });
         }
 
+        // check if team exist
+        const teamExist = await Team.findById(teamId);
+
+        if (!teamExist) {
+            return res.status(400).json({
+                success: false,
+                message: 'Team does not exist.'
+            });
+        }
+
         const totalMembersOfTeam = await TeamMember.find({
             teamId: teamId,
             active: true
         })
 
-        if (totalMembersOfTeam.length === 4) {
+        if (totalMembersOfTeam.length === teamExist.totalMembers) {
             return res.status(400).json({
                 success: false,
                 message: 'Team is full.'
@@ -56,7 +66,8 @@ export const joinTeam = async (req, res) => {
 
         const alreadyJoined = await TeamMember.findOne({
             userId: req.user._id,
-            teamId: teamId
+            teamId: teamId,
+            active: true
         })
 
         if (alreadyJoined) {
@@ -72,7 +83,6 @@ export const joinTeam = async (req, res) => {
             name: name,
             email: email,
             reasonToJoin: reasonToJoin,
-            githubLink: githubLink
         })
 
         if (!teamMember) {
@@ -282,7 +292,7 @@ export const getAllTeamMembers = async (req, res) => {
 export const createOwner = async (req, res) => {
     const userId = req.user._id;
     const {teamId} = req.params;
-    const {data, error} = joinTeamSchema.safeParse(req.body);
+    const {data, error} = teamOwnerSchema.safeParse(req.body);
 
     if (error) {
         return res.status(400).json({
