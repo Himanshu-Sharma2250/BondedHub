@@ -182,7 +182,6 @@ export const getAllApplication = async (req, res) => {
     try {
         const applications = await Application.find({
             userId: req.user._id,
-            status: "PENDING"
         })
 
         if (!applications) {

@@ -334,7 +334,8 @@ export const createOwner = async (req, res) => {
             name: name,
             email: email,
             reasonToJoin: "Team Owner",
-            teamRole: 'LEADER'
+            teamRole: 'LEADER',
+            memberAction: "CREATED"
         })
 
         res.status(201).json({
