@@ -59,7 +59,7 @@ const AllGroupsTab = () => {
 
     return (
         <div>
-            {teams.length == 0 ? (
+            {teams.length === 0 ? (
                 <span className='text-2xl m-auto'>
                     No teams found
                 </span>

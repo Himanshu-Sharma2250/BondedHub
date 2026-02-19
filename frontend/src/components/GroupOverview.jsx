@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 
 const GroupOverview = ({team, members}) => {
     const [teamLeader, setTeamLeader] = useState(null)
-    const leader = members.filter((member) => member?.teamRole === 'LEADER')
+    const leader = members.find((member) => member?.teamRole === 'LEADER')
 
 
     return (
@@ -26,7 +26,7 @@ const GroupOverview = ({team, members}) => {
 
                 <div className='flex gap-2'>
                     {team?.techUsed.map((tag) => {
-                        return <span className='px-1 rounded-xs bg-blue-300'>
+                        return <span className='px-1 rounded-xs bg-blue-300' key={tag}>
                             {tag}
                         </span>
                     })}
@@ -43,11 +43,11 @@ const GroupOverview = ({team, members}) => {
                     {/* Group's Leader */}
                     <div className='flex justify-between px-2 '>
                         <span>
-                            {leader?.name}
+                            Leader
                         </span>
 
                         <span>
-                            Name
+                            {leader?.name || "Loading..."}
                         </span>
                     </div>
 
@@ -69,7 +69,7 @@ const GroupOverview = ({team, members}) => {
                         </span>
 
                         <span>
-                            {team?.createdAt || "data not loaded"}
+                            {team?.updatedAt || "data not loaded"}
                         </span>
                     </div>
 

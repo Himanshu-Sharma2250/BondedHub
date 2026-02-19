@@ -34,8 +34,8 @@ const MyGroupTab = () => {
 
             <div className='flex flex-col'>
                 <div className='flex gap-1'>
-                    {team?.techUsed?.map((tag) => {
-                        return <span className='px-0.5 rounded-xl bg-gray-100'>
+                    {team?.techUsed?.map((tag, index) => {
+                        return <span className='px-0.5 rounded-xl bg-gray-100' key={index}>
                             {tag}
                         </span>
                     })}
@@ -60,7 +60,7 @@ const MyGroupTab = () => {
 
     return (
         <div>
-            {team !== null ? (createTeamCard()) : (
+            {team?._id ? (createTeamCard()) : (
                 <span className='text-2xl m-auto'>
                     No team found
                 </span>

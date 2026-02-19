@@ -11,13 +11,14 @@ const GroupNotes = ({teamId}) => {
     const {user} = useAuthStore();
 
     useEffect(() => {
-        function fetchNotes() {
+        if (user?._id)  {
             getTeamMember(teamId, user._id);
             getPublicNotes(teamId);
             getPrivateNotes(teamId);
         }
-        fetchNotes();
-    }, [])
+    }, [user?._id])
+
+    const notesToShow = member ? [...publicNotes, ...privateNotes] : publicNotes;
 
     const createNoteCards = (note) => {
         return <div className='flex flex-col px-2 py-1 border-2 gap-2' key={note?._id}>
@@ -56,24 +57,17 @@ const GroupNotes = ({teamId}) => {
                             Only Members can access notes
                         </span>
                     ) : (
-                        publicNotes?.map((note) => createNoteCards(note))
+                        notesToShow?.map((note) => createNoteCards(note))
                     )
                     
                 ) : (
-                    privateNotes?.map((note) => createNoteCards(note))
+                    notesToShow?.map((note) => createNoteCards(note))
                 )}
                 
             </div>
 
             {/* this shows only if the user is leader of group */}
-            
-            <button className='fixed bottom-10 right-2 cursor-pointer'>
-                {member?.teamRole === "MEMBER" ? (
-                ""
-            ) : (
-                <CreateNoteModal />
-            )}
-            </button>
+            {member?.teamRole === "LEADER" && <CreateNoteModal />}
         </div>
     )
 }

@@ -21,19 +21,19 @@ const GroupDetailPage = () => {
     const {getTeamMember, member, getTeamMembers, members} = useTeamMemberStore();
 
     useEffect(() => {
-        function fetchTeam() {
-            getTeam(teamId)
-            getTeamMember(teamId, user._id)
-            getTeamMembers(teamId)
+        if (user?._id && teamId) {
+            getTeam(teamId);
+            getTeamMember(teamId, user._id);
+            getTeamMembers(teamId);
         }
-        fetchTeam();
-    }, [])
+    }, [teamId, user?._id]);
 
     if (loading) {
         return <div className='m-auto'>
             <Loader2 className='w-5 animate-spin' />
         </div>
     }
+    console.log("members: ", member)
 
     return (
         <div className='pb-1 flex flex-col gap-1'>
@@ -67,13 +67,9 @@ const GroupDetailPage = () => {
 
                 {/* contains apply btn and dialog that pop up */}
                 <div>
-                    {member === null ? (
-                        // not a member
-                        <ApplyToGroupModal teamId={teamId} />
-                    ) : (
-                        // is a member
-                        member?.teamRole === "MEMBER" ? (<LeaveGroupModal teamId={teamId} />) : (<DeleteGroupPopUp teamId={teamId} />)
-                    )}
+                    {!member && <ApplyToGroupModal teamId={teamId} />}
+                    {member?.teamRole === 'MEMBER' && <LeaveGroupModal teamId={teamId} />}
+                    {member?.teamRole === 'LEADER' && <DeleteGroupPopUp teamId={teamId} />}
                 </div>
             </div>
 

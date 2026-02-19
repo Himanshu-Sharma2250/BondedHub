@@ -13,6 +13,7 @@ export const useTeamStore = create((set) => ({
             const res = await axiosInstance.post("/team/create-team", teamData);
             
             set({team: res.data.team});
+            return res.data.team
         } catch (error) {
             console.error("Error creating team: ", error);
         } finally {

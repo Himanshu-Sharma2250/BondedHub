@@ -36,10 +36,20 @@ const CreateGroupModal = () => {
     };
 
     const onCreateTeam = async (data) => {
-        createTeam(data);
-        console.log(data)
-        createTeamOwner(team._id, {name: user?.name, email: user?.email})
-    }
+        try {
+            const newTeam = await createTeam(data); 
+            if (newTeam?._id) {
+                await createTeamOwner(newTeam._id, {
+                    name: user?.name,
+                    email: user?.email,
+                });
+                toast.success("Group created successfully!");
+                closeModal();
+            }
+        } catch (error) {
+            toast.error(error.response?.data?.message || "Failed to create group");
+        }
+    };
 
     return (
         <div>

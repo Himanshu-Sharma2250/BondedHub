@@ -59,6 +59,12 @@ const CreateNoteModal = () => {
                             placeholder="Note's Description" 
                         />
                     </label>
+                    
+                    <label className='flex flex-col items-start text-sm font-medium'>
+                        Select Whom to show
+                        {/* <input type="checkbox" name="Public" id="public" placeholder='' />
+                        <input type="checkbox" name="Private" id="private" /> */}
+                    </label>
 
                     <div className='flex gap-2 justify-center items-center w-full mt-5'>
                         <Button 

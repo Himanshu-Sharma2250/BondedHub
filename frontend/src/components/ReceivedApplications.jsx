@@ -9,13 +9,13 @@ import toast from 'react-hot-toast'
 import { useTeamMemberStore } from '../store/useTeamMemberStore'
 
 const ReceivedApplications = () => {
-    const {getApplications, isGetting, applications, acceptApplication, rejectApplication} = useApplicationStore();
+    const {getAllReceivedApplications, isGetting, receivedApplications, acceptApplication, rejectApplication, isAccepting, isRejecting} = useApplicationStore();
     const {user} = useAuthStore();
     const {teamJoin} = useTeamMemberStore();
 
     useEffect(() => {
         function fetchApplications() {
-            getApplications();
+            getAllReceivedApplications();
         }
         fetchApplications();
     }, [])
@@ -45,8 +45,7 @@ const ReceivedApplications = () => {
         }
     }
 
-    const receivedApplications = applications.filter((application) => application.decidedBy === user._id);
-    console.log("recieved app", applications)
+    console.log("received app: ", receivedApplications)
 
     const createApplicationCards = (application) => {
         return <div className='flex flex-col px-2 py-2 border-2 w-full gap-3 justify-between'>
@@ -115,8 +114,18 @@ const ReceivedApplications = () => {
 
             {/* div 3 - contains withdraw button */}
             <div className='flex gap-3'>
-                <Button name="Accept" bgColor="#FF7A59" btnSize="15px" onClick={() => onAcceptApplication(application)} />
-                <Button name="Reject" bgColor="#FF7A59" btnSize="15px" onClick={() => onRejectApplication(application?._id)} />
+                <Button 
+                    name={isAccepting ? (<Loader2 className='w-4 animate-spin' />) : ("Accept")}
+                    bgColor="#FF7A59" 
+                    btnSize="15px" 
+                    onClick={() => onAcceptApplication(application)} 
+                />
+                <Button 
+                    name={isRejecting ? (<Loader2 className='w-4 animate-spin' />) : ("Reject")}
+                    bgColor="#FF7A59" 
+                    btnSize="15px" 
+                    onClick={() => onRejectApplication(application?._id)} 
+                />
             </div>
         </div>
     }

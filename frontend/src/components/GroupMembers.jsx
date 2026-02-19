@@ -5,11 +5,11 @@ import { useEffect, useState } from 'react';
 import { Loader2 } from 'lucide-react';
 
 const GroupMembers = ({members}) => {
-    const teamLeader = members?.find((member) => member.teamRole !== "MEMBER")
-    const teamMembers = members?.map((member) => member.teamRole === "MEMBER")
+    const teamLeader = members?.find((member) => member.teamRole === "LEADER")
+    const teamMembers = members?.filter((member) => member.teamRole === "MEMBER")
 
     const createLeaderCard = () => {
-        return <div className='flex items-center justify-between mx-2 px-2 py-1 border-2 rounded-xs'>
+        return <div className='flex items-center justify-between mx-2 px-2 py-1 border-2 rounded-xs' key={teamLeader?._id}>
             {/* leader's profile, name and email */}
             <div className='flex gap-2 items-center'>
                 {/* leader's profile */}
