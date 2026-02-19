@@ -69,9 +69,10 @@ export const useTeamStore = create((set) => ({
 
         try {
             const res = await axiosInstance.get("/team/my-team")
-            set({team: res.data.team})
+            set({team: res.data.team || null})
         } catch (error) {
             console.error("Error fetching my team ", error);
+            set({ team: null });
         } finally {
             set({loading: false})
         }
