@@ -14,7 +14,7 @@ const GroupNotes = ({ teamId }) => {
         privateNotes,
         publicNotes,
     } = useNoteStore();
-    const { getTeamMember, member } = useTeamMemberStore();
+    const { getTeamMember, member, isGetting: isGettingMember } = useTeamMemberStore();
     const { user } = useAuthStore();
 
     useEffect(() => {
@@ -29,11 +29,14 @@ const GroupNotes = ({ teamId }) => {
     const notesToShow = member ? [...publicNotes, ...privateNotes] : publicNotes;
 
     // Sort by newest first
-    const sortedNotes = notesToShow.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    const sortedNotes = [...notesToShow].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
     const isLeader = member?.teamRole === 'LEADER';
+    console.log('member:', member);
+    console.log('publicNotes:', publicNotes);
+    console.log('privateNotes:', privateNotes);
 
-    if (isGettingNotes) {
+    if (isGettingNotes || isGettingMember) {
         return (
             <div className="flex justify-center items-center py-10">
                 <Loader2 className="w-8 h-8 animate-spin text-[#2A6E8C]" />
@@ -43,11 +46,11 @@ const GroupNotes = ({ teamId }) => {
 
     return (
         <div className="px-2 py-4 border-2 border-[#CBD5E1] rounded-md bg-[#F8FAFC] relative min-h-50">
-            {notesToShow.length === 0 ? (
+            {sortedNotes.length === 0 ? (
                 <div className="text-center py-10">
                     {!member ? (
                         <span className="text-lg text-[#FF7A59]">
-                            Only members can access notes
+                            You are not a member. Only public notes would appear here, but there are none.
                         </span>
                     ) : (
                         <span className="text-lg text-[#64748B]">
@@ -68,7 +71,6 @@ const GroupNotes = ({ teamId }) => {
                 </div>
             )}
 
-            {/* Create Note Button (only for leader) */}
             {isLeader && (
                 <div className="sticky bottom-4 flex justify-end mt-4">
                     <CreateNoteModal teamId={teamId} />

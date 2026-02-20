@@ -15,7 +15,7 @@ const noteSchema = z.object({
 
 const CreateNoteModal = ({ teamId }) => {
     const dialogRef = useRef(null);
-    const { createNote, isCreatingNote } = useNoteStore();
+    const { createNote, isCreatingNote, getPublicNotes, getPrivateNotes } = useNoteStore();
 
     const {
         register,
@@ -44,6 +44,8 @@ const CreateNoteModal = ({ teamId }) => {
     const onSubmit = async (data) => {
         try {
             await createNote(data, teamId);
+            await getPublicNotes(teamId);
+            await getPrivateNotes(teamId);
             closeModal();
         } catch (error) {
             console.error('Failed to create note:', error);

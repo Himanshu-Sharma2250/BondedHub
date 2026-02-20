@@ -55,6 +55,7 @@ export const useTeamMemberStore = create((set) => ({
             set({member: res.data.teamMember})
         } catch (error) {
             console.error("Error fetching member: ", error);
+            set({ member: null });
         } finally {
             set({isGetting: false});
         }
@@ -68,6 +69,7 @@ export const useTeamMemberStore = create((set) => ({
             set({members: res.data.teamMembers})
         } catch (error) {
             console.error("Error fetching team members: ", error);
+            set({members: []})
         } finally {
             set({isGetting: false});
         }

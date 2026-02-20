@@ -34,6 +34,7 @@ export const useNoteStore = create((set) => ({
     },
 
     getPublicNotes: async (teamId) => {
+        console.log("getting public notes with teamId ", teamId)
         set({isGettingNotes: true});
 
         try {
@@ -41,12 +42,14 @@ export const useNoteStore = create((set) => ({
             set({publicNotes: res.data.publicNotes});
         } catch (error) {
             console.error("Error fetching public notes: ", error);
+            set({publicNotes: []});
         } finally {
             set({isGettingNotes: false});
         }
     },
 
     getPrivateNotes: async (teamId) => {
+        console.log("getting private notes with teamId ", teamId)
         set({isGettingNotes: true});
 
         try {
@@ -54,6 +57,7 @@ export const useNoteStore = create((set) => ({
             set({privateNotes: res.data.privateNotes});
         } catch (error) {
             console.error("Error fetching private notes: ", error);
+            set({privateNotes: []});
         } finally {
             set({isGettingNotes: false});
         }

@@ -13,7 +13,7 @@ const editNoteSchema = z.object({
 
 const EditNoteModal = ({ note, teamId, onClose }) => {
     const dialogRef = useRef(null);
-    const { editNote, isEditingNote } = useNoteStore();
+    const { editNote, isEditingNote, getPublicNotes, getPrivateNotes } = useNoteStore();
 
     const {
         register,
@@ -35,7 +35,8 @@ const EditNoteModal = ({ note, teamId, onClose }) => {
 
     const onSubmit = async (data) => {
         await editNote(data, note._id);
-        // Optionally refresh notes (handled in parent via useEffect)
+        await getPublicNotes(teamId);
+        await getPrivateNotes(teamId);
         onClose();
     };
 
