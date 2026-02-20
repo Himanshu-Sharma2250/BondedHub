@@ -67,7 +67,7 @@ const GroupNotes = ({teamId}) => {
             </div>
 
             {/* this shows only if the user is leader of group */}
-            {member?.teamRole === "LEADER" && <CreateNoteModal />}
+            {member?.teamRole === "LEADER" && <CreateNoteModal teamId={teamId} />}
         </div>
     )
 }

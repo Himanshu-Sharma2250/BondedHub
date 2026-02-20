@@ -4,7 +4,7 @@ import { useTeamMemberStore } from '../store/useTeamMemberStore';
 import { useEffect, useState } from 'react';
 import { Loader2 } from 'lucide-react';
 
-const GroupMembers = ({members}) => {
+const GroupMembers = ({members, loading}) => {
     const teamLeader = members?.find((member) => member.teamRole === "LEADER")
     const teamMembers = members?.filter((member) => member.teamRole === "MEMBER")
 
@@ -67,6 +67,12 @@ const GroupMembers = ({members}) => {
                     <Button name={'View Profile'} btnSize={'16px'} bgColor={'#2A6E8C'} />
                 </NavLink>
             </div>
+        </div>
+    }
+
+    if (loading) {
+        return <div className='px-2 flex flex-col gap-2 border-2 py-2 pb-3 rounded-xs'>
+            <Loader2 className='w-4 animate-spin' />
         </div>
     }
 

@@ -18,7 +18,7 @@ const GroupDetailPage = () => {
     const {teamId} = useParams()
     const {team, loading, getTeam} = useTeamStore();
     const {user} = useAuthStore();
-    const {getTeamMember, member, getTeamMembers, members} = useTeamMemberStore();
+    const {getTeamMember, member, getTeamMembers, members, isGetting} = useTeamMemberStore();
 
     useEffect(() => {
         if (user?._id && teamId) {
@@ -109,7 +109,7 @@ const GroupDetailPage = () => {
                 <GroupOverview team={team} members={members} />
             ) : (
                 selectedTab === 'Members' ? (
-                    <GroupMembers members={members} />
+                    <GroupMembers members={members} loading={isGetting} />
                 ) : (
                     selectedTab === 'Notes' ? (
                         <GroupNotes teamId={team?._id} />
