@@ -1,73 +1,102 @@
-import { Loader2, User, Users } from 'lucide-react'
-import React, { useEffect } from 'react'
-import { NavLink } from 'react-router-dom'
-import { useTeamStore } from '../store/useTeamStore'
+import { Loader2, User, Users } from 'lucide-react';
+import React, { useEffect } from 'react';
+import { NavLink } from 'react-router-dom';
+import { useTeamStore } from '../store/useTeamStore';
+
+// Generate a consistent HSL color from a string (team name)
+const getAvatarColor = (name) => {
+    if (!name) return '#6b7280';
+    let hash = 0;
+    for (let i = 0; i < name.length; i++) {
+        hash = name.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    const hue = Math.abs(hash % 360);
+    return `hsl(${hue}, 70%, 60%)`;
+};
 
 const AllGroupsTab = () => {
-    const {loading, getAllTeams, teams} = useTeamStore();
+    const { loading, getAllTeams, teams } = useTeamStore();
 
     useEffect(() => {
-        function fetchTeams() {
-            getAllTeams();
-        }
-        fetchTeams();
-    }, [getAllTeams])
-
-    const createGroupCards = (team) => {
-        return <NavLink to={`/groups/${team?._id}`} key={team._id} className='flex flex-col justify-between gap-2 border-2 px-2 py-1 min-h-56 w-72 rounded-xs cursor-pointer'>
-            <div className='flex flex-col'>
-                <h1 className='text-xl'>
-                    {team.name}
-                </h1>
-
-                <p>
-                    {team.description}
-                </p>
-            </div>
-
-            <div className='flex flex-col'>
-                <div className='flex gap-1'>
-                    {team.techUsed?.map((tag, i) => {
-                        return <span className='px-0.5 rounded-xl bg-gray-100' key={i}>
-                            {tag}
-                        </span>
-                    })}
-                </div>
-
-                <span className='flex gap-1 items-center'>
-                    <User className='w-3.5'/>
-                    Team Leader
-                </span>
-
-                <span className='flex gap-1 items-center'>
-                    <Users className='w-3.5' />
-                    {team.totalMembers - 1} members
-                </span>
-
-                <span>
-                    {team.isDeleted ? "Not Active" : "Active"}
-                </span>
-            </div>
-        </NavLink>
-    }
+        getAllTeams();
+    }, [getAllTeams]);
 
     if (loading) {
-        return <div className='m-auto'>
-            <Loader2 className='w-5 animate-spin' />
-        </div>
+        return (
+            <div className="flex justify-center items-center py-20">
+                <Loader2 className="w-8 h-8 animate-spin text-[#2A6E8C]" />
+            </div>
+        );
     }
 
     return (
-        <div className='flex gap-2'>
+        <div className="flex flex-wrap gap-4">
             {teams.length === 0 ? (
-                <span className='text-2xl m-auto'>
-                    No teams found
-                </span>
+                <span className="text-2xl text-[#64748B] m-auto py-10">No teams found</span>
             ) : (
-                teams?.map((team) => createGroupCards(team))
+                teams.map((team) => (
+                    <NavLink
+                        to={`/groups/${team._id}`}
+                        key={team._id}
+                        className="flex flex-col w-72 border border-[#CBD5E1] rounded-md bg-white shadow-sm hover:shadow-md transition-shadow p-4"
+                    >
+                        {/* Header with avatar and name */}
+                        <div className="flex items-start gap-3">
+                            <div
+                                className="w-12 h-12 rounded-md flex items-center justify-center text-white font-bold text-xl flex-shrink-0"
+                                style={{ backgroundColor: getAvatarColor(team.name) }}
+                            >
+                                {team.name?.charAt(0).toUpperCase()}
+                            </div>
+                            <div className="flex-1 min-w-0">
+                                <h3 className="text-lg font-semibold text-[#0F172A] truncate">{team.name}</h3>
+                                <p className="text-sm text-[#334155] line-clamp-2">{team.description}</p>
+                            </div>
+                        </div>
+
+                        {/* Tech tags */}
+                        {team.techUsed?.length > 0 && (
+                            <div className="flex flex-wrap gap-1 mt-3">
+                                {team.techUsed.map((tag, index) => (
+                                    <span
+                                        key={index}
+                                        className="px-2 py-0.5 text-xs bg-[#E2E8F0] text-[#475569] rounded-full"
+                                    >
+                                        {tag}
+                                    </span>
+                                ))}
+                            </div>
+                        )}
+
+                        {/* Stats */}
+                        <div className="flex flex-col gap-2 mt-4 text-xs text-[#64748B]">
+                            <span className="flex items-center gap-1">
+                                <User className="w-3.5 h-3.5" />
+                                Team Leader
+                            </span>
+                            <span className="flex items-center gap-1">
+                                <Users className="w-3.5 h-3.5" />
+                                {team.totalMembers - 1} members
+                            </span>
+                        </div>
+
+                        {/* Active status badge */}
+                        <div className="mt-3 text-right">
+                            <span
+                                className={`inline-block px-2 py-0.5 text-xs font-medium rounded-full ${
+                                    team.isDeleted
+                                        ? 'bg-red-100 text-red-700'
+                                        : 'bg-green-100 text-green-700'
+                                }`}
+                            >
+                                {team.isDeleted ? 'Inactive' : 'Active'}
+                            </span>
+                        </div>
+                    </NavLink>
+                ))
             )}
         </div>
-    )
-}
+    );
+};
 
-export default AllGroupsTab
+export default AllGroupsTab;
