@@ -2,11 +2,31 @@ import { MoveLeft, Loader2 } from 'lucide-react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { useAuthStore } from '../store/useAuthStore';
+import { useUserHistoryStore } from '../store/useUserHistoryStore';
+
+const actionColorMap = {
+    CREATED: '#10b981',   // green
+    JOINED: '#3b82f6',    // blue
+    LEFT: '#ef4444',      // red
+    KICKED_OUT: '#f97316', // orange
+    DELETED: '#6b7280',   // gray
+};
+
+const getAvatarColor = (name) => {
+    if (!name) return '#6b7280';
+    let hash = 0;
+    for (let i = 0; i < name.length; i++) {
+        hash = name.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    const hue = Math.abs(hash % 360);
+    return `hsl(${hue}, 80%, 60%)`;
+};
 
 const UserProfilePage = () => {
     const { userId } = useParams();
     const navigate = useNavigate();
     const { getUserProfile, loading, otherUser } = useAuthStore();
+    const {getUserHistories, userHistory} = useUserHistoryStore();
     const [error, setError] = useState(null);
 
     useEffect(() => {
@@ -15,6 +35,7 @@ const UserProfilePage = () => {
             try {
                 setError(null);
                 await getUserProfile(userId);
+                await getUserHistories();
             } catch (err) {
                 setError('User not found or failed to load.');
             }
@@ -25,7 +46,7 @@ const UserProfilePage = () => {
         }
 
         return () => abortController.abort();
-    }, [userId, getUserProfile]);
+    }, [userId, getUserProfile, getUserHistories]);
 
     // Format date for "Member Since"
     const formatDate = (dateString) => {
@@ -54,6 +75,36 @@ const UserProfilePage = () => {
         );
     }
 
+    const createHistoryCard = (historyItem) => {
+        const dotColor = actionColorMap[historyItem.userAction] || '#64748B';
+
+        return (
+            <div
+                key={historyItem._id}
+                className="flex flex-col px-4 py-3 border border-[#CBD5E1] rounded-md bg-white shadow-sm hover:shadow-md transition-shadow"
+            >
+                <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                        {/* Colored dot */}
+                        <span
+                            className="w-2.5 h-2.5 rounded-full inline-block"
+                            style={{ backgroundColor: dotColor }}
+                        />
+                        <h3 className="text-lg font-semibold text-[#0F172A]">
+                            {historyItem.title}
+                        </h3>
+                    </div>
+                    <span className="text-xs text-[#64748B]">
+                        {formatDate(historyItem.createdAt)}
+                    </span>
+                </div>
+                <p className="mt-2 text-sm text-[#334155]">
+                    {historyItem.description}
+                </p>
+            </div>
+        );
+    };
+
     return (
         <div className='py-2 flex flex-col gap-10'>
             {/* Back button and header */}
@@ -72,7 +123,7 @@ const UserProfilePage = () => {
             {/* User avatar and basic info */}
             <div className='flex gap-2 items-center'>
                 <div className='flex items-center'>
-                    <span className='p-5 bg-cyan-800 uppercase'>
+                    <span className='p-5 bg-cyan-800 uppercase' style={{ backgroundColor: getAvatarColor(otherUser?.name) }}>
                         {(otherUser?.fullName?.[0] || otherUser?.name?.[0] || 'U')}
                     </span>
                 </div>
@@ -215,19 +266,16 @@ const UserProfilePage = () => {
             {/* User History (static for now) */}
             <div className='flex flex-col gap-2'>
                 <h1 className='text-2xl font-bold'>User History</h1>
-                <div className='flex flex-col px-5 py-4 gap-2 shadow rounded-xs border-gray-600'>
-                    <div className='flex items-center justify-between px-2 py-1 shadow-gray-800 shadow-xs rounded-xs'>
-                        <div className='flex gap-2 items-center'>
-                            <span className='text-4xl text-fuchsia-700'>•</span>
-                            <div className='flex flex-col'>
-                                <span className='font-bold'>History Title</span>
-                                <span className='text-sm text-gray-700'>History Reason</span>
-                            </div>
+                <div className="px-4 py-4 border-2 border-[#CBD5E1] rounded-md bg-[#F8FAFC]">
+                    {!userHistory || userHistory.length === 0 ? (
+                        <div className="text-center py-10">
+                            <span className="text-lg text-[#64748B]">No History</span>
                         </div>
-                        <div>
-                            <span className='text-sm text-gray-700'>[date - time]</span>
+                    ) : (
+                        <div className="flex flex-col gap-3">
+                            {userHistory.map(createHistoryCard)}
                         </div>
-                    </div>
+                    )}
                 </div>
             </div>
         </div>
