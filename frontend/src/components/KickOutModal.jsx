@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import { useUserHistoryStore } from '../store/useUserHistoryStore';
 import { useTeamHistoryStore } from '../store/useTeamHistoryStore';
 import { useTeamMemberStore } from '../store/useTeamMemberStore';
+import Button from './Button';
 
 const KickOutModal = ({teamId}) => {
     const {userKickedOutOfTeam} = useUserHistoryStore();

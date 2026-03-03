@@ -102,7 +102,7 @@ const GroupDetailPage = () => {
             {/* div 2 - shows the respective detail of above navigation btns */}
             <div className="px-2">
                 {selectedTab === 'Overview' && <GroupOverview team={team} members={members} />}
-                {selectedTab === 'Members' && <GroupMembers members={members} loading={isGetting} />}
+                {selectedTab === 'Members' && <GroupMembers teamId={team?._id} teamRole={member?.teamRole} members={members} loading={isGetting} />}
                 {selectedTab === 'Notes' && <GroupNotes teamId={team?._id} />}
                 {selectedTab === 'History' && <GroupHistory teamId={team?._id} />}
             </div>

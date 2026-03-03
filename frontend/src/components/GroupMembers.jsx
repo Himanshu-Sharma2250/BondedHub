@@ -1,6 +1,7 @@
 import { NavLink } from 'react-router-dom';
 import Button from './Button';
 import { Loader2 } from 'lucide-react';
+import KickOutModal from './KickOutModal';
 
 const getAvatarColor = (name) => {
     if (!name) return '#6b7280'; // gray fallback
@@ -12,7 +13,7 @@ const getAvatarColor = (name) => {
     return `hsl(${hue}, 80%, 60%)`; // vibrant, consistent
 };
 
-const GroupMembers = ({ members, loading }) => {
+const GroupMembers = ({ teamId, teamRole, members, loading }) => {
     const teamLeader = members?.find((member) => member.teamRole === 'LEADER');
     const teamMembers = members?.filter((member) => member.teamRole === 'MEMBER');
 
@@ -58,7 +59,8 @@ const GroupMembers = ({ members, loading }) => {
             </div>
             <div>
                 <NavLink to={`/user/${member?.userId}`}>
-                    <Button name="View Profile" btnSize="14px" bgColor="#2A6E8C" />
+                    {teamRole === 'LEADER' && <KickOutModal teamId={teamId} />}
+                    {teamRole === 'MEMBER' && <Button name="View Profile" btnSize="14px" bgColor="#2A6E8C" />}
                 </NavLink>
             </div>
         </div>
