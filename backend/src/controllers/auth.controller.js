@@ -23,6 +23,7 @@ export const registerUser = async (req, res) => {
     }
 
     const {name, email, password} = data;
+    const username = name.slice(0, -10);
 
     try {
         // find if the user already exist or not 
@@ -38,7 +39,8 @@ export const registerUser = async (req, res) => {
         }
 
         const user = await User.create({
-            name,
+            fullName: name,
+            name: `@${username}`,
             email,
             password,
         });

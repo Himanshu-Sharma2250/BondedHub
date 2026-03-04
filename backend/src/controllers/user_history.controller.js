@@ -265,7 +265,7 @@ export const getUserHistories = async (req, res) => {
         }
 
         res.status(200).json({
-            success: false,
+            success: true,
             message: "User history fetched successfully",
             history
         })
