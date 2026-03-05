@@ -54,6 +54,7 @@ const LeaveGroupModal = ({teamId}) => {
                 <div className='w-full flex items-center justify-center'>
                     <h1 className='text-2xl font-bold'>
                         Are you sure?
+                        <span className='font-light text-gray-300 text-xs'>(If you leave, you cannot join the same team again)</span>
                     </h1>
                 </div>
 

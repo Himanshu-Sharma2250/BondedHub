@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import { useTeamHistoryStore } from '../store/useTeamHistoryStore'
 import { Loader2 } from 'lucide-react';
+import { useMemo } from 'react';
 
 const actionColorMap = {
     CREATED: '#10b981',   // green
@@ -29,11 +30,20 @@ const GroupHistory = ({teamId}) => {
             month: 'short',
             day: 'numeric',
             year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
         });
     };
 
+    // Sort history from latest to oldest
+    const sortedHistory = useMemo(() => {
+        if (!history) return [];
+        return [...history].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    }, [history]);
+
+
     const createHistoryCard = (historyItem) => {
-        const dotColor = actionColorMap[historyItem.teamAction] || '#64748B'; // default slate
+        const dotColor = actionColorMap[historyItem.teamAction] || '#64748B'; 
 
         return (
             <div
@@ -69,19 +79,17 @@ const GroupHistory = ({teamId}) => {
             </div>
         );
     }
-    console.log("team id ", teamId);
-    console.log("history: ", history)
-
+    
     return (
         <div className="px-4 py-4 border-2 border-[#CBD5E1] rounded-md bg-[#F8FAFC]">
             {/* histories */}
-            {!history || history.length === 0 ? (
+            {!sortedHistory || sortedHistory.length === 0 ? (
                 <div className="text-center py-10">
                     <span className="text-lg text-[#64748B]">No History</span>
                 </div>
             ) : (
                 <div className="flex flex-col gap-3">
-                    {history.map(createHistoryCard)}
+                    {sortedHistory.map(createHistoryCard)}
                 </div>
             )}
         </div>

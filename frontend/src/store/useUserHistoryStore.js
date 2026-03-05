@@ -11,7 +11,7 @@ export const useUserHistoryStore = create((set) => ({
         try {
             const res = await axiosInstance.get("/userHistory");
             
-            set({userHistory: res.data.histories});
+            set({userHistory: res.data.history});
         } catch (error) {
             console.error("Error fetching user histories: ", error);
             set({userHistory: []});

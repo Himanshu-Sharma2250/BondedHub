@@ -3,6 +3,7 @@ import EditProfileModal from '../components/EditProfileModal'
 import { useAuthStore } from '../store/useAuthStore'
 import { useUserHistoryStore } from '../store/useUserHistoryStore';
 import { Loader2 } from 'lucide-react';
+import { useMemo } from 'react';
 
 const actionColorMap = {
     CREATED: '#10b981',   // green
@@ -41,8 +42,16 @@ const MyProfile = () => {
             month: 'short',
             day: 'numeric',
             year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
         });
     };
+
+    // Sort history from latest to oldest
+    const sortedHistory = useMemo(() => {
+        if (!userHistory) return [];
+        return [...userHistory].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    }, [userHistory]);
 
     const createHistoryCard = (historyItem) => {
         const dotColor = actionColorMap[historyItem.userAction] || '#64748B';
@@ -295,13 +304,13 @@ const MyProfile = () => {
                         <div className="flex justify-center items-center py-10">
                             <Loader2 className="w-8 h-8 animate-spin text-[#2A6E8C]" />
                         </div>
-                    ) : !userHistory || userHistory.length === 0 ? (
+                    ) : !sortedHistory || sortedHistory.length === 0 ? (
                         <div className="text-center py-10">
                             <span className="text-lg text-[#64748B]">No History</span>
                         </div>
                     ) : (
                         <div className="flex flex-col gap-3">
-                            {userHistory.map(createHistoryCard)}
+                            {sortedHistory.map(createHistoryCard)}
                         </div>
                     )}
                 </div>

@@ -23,18 +23,19 @@ const AllGroupsTab = () => {
 
     if (loading) {
         return (
-            <div className="flex justify-center items-center py-20">
+            <div className="flex justify-center items-center py-20 w-full h-full">
                 <Loader2 className="w-8 h-8 animate-spin text-[#2A6E8C]" />
             </div>
         );
     }
 
+    if (teams.length === 0) {
+        return <div className="text-2xl text-[#64748B] m-auto text-center py-10 h-full w-full">No teams found</div>
+    }
+
     return (
         <div className="flex flex-wrap gap-4">
-            {teams.length === 0 ? (
-                <span className="text-2xl text-[#64748B] m-auto py-10">No teams found</span>
-            ) : (
-                teams.map((team) => (
+            {teams.map((team) => (
                     <NavLink
                         to={`/groups/${team._id}`}
                         key={team._id}
@@ -94,7 +95,7 @@ const AllGroupsTab = () => {
                         </div>
                     </NavLink>
                 ))
-            )}
+            }
         </div>
     );
 };

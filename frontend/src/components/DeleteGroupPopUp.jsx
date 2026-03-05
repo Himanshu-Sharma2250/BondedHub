@@ -32,6 +32,8 @@ const DeleteGroupPopUp = ({teamId}) => {
             toast.success("Team Deleted");
         } catch (error) {
             toast.error("Error deleting Team");
+        } finally {
+            closeModal();
         }
     }
 
@@ -51,7 +53,7 @@ const DeleteGroupPopUp = ({teamId}) => {
 
                 <form 
                     className='flex flex-col gap-3' 
-                    onSubmit={(e) => {handleSubmit(handleDelete)}}
+                    onSubmit={handleSubmit(handleDelete)}
                 >
                     <label className='flex flex-col text-sm font-medium'>
                         <input 

@@ -22,14 +22,14 @@ const MyGroupTab = () => {
 
     if (loading) {
         return (
-            <div className="flex justify-center items-center py-20">
+            <div className="flex justify-center items-center py-20 h-full w-full">
                 <Loader2 className="w-8 h-8 animate-spin text-[#2A6E8C]" />
             </div>
         );
     }
 
     if (!team?._id) {
-        return <span className="text-2xl text-[#64748B] py-10 block text-center">No team found</span>;
+        return <span className="text-2xl text-[#64748B] py-10 block text-center h-full w-full">No team found</span>;
     }
 
     return (

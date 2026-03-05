@@ -52,6 +52,7 @@ export const useTeamStore = create((set) => ({
 
     deleteTeam: async (teamId) => {
         set({loading: true});
+        console.log("getting data to delete team is ", teamId)
 
         try {
             await axiosInstance.delete(`/team/delete-team/${teamId}`);

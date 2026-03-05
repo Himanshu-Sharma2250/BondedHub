@@ -39,15 +39,15 @@ const SignUpPage = () => {
                 <form onSubmit={handleSubmit(onSignUp)} className='w-full flex flex-col gap-2 h-[80%]'>
                     <label className='flex flex-col h-17'>
                         <span className='text-[14px]'>
-                            Username
+                            Full Name
                         </span>
 
                         <input 
                             type="text" 
                             className='border-2 h-10 px-2' 
-                            name="name" 
-                            id="username" 
-                            placeholder='username' 
+                            name="fullname" 
+                            id="fullName" 
+                            placeholder='full name' 
                             {...register("name")} 
                         />
                     </label>

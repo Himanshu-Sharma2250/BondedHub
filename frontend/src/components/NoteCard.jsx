@@ -34,7 +34,14 @@ const NoteCard = ({ note, teamId, isLeader }) => {
 
     const formatDate = (dateString) => {
         const date = new Date(dateString);
-        return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+        return date.toLocaleDateString('en-US', 
+            { 
+                month: 'short', 
+                day: 'numeric', 
+                year: 'numeric', 
+                hour: '2-digit',
+                minute: '2-digit', 
+        });
     };
 
     return (

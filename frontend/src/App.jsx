@@ -37,7 +37,10 @@ function App() {
     return (
         <>
             <div className='h-screen w-screen'>
-                <Toaster />
+                <Toaster
+                    position="bottom-right"
+                    reverseOrder={true}
+                />
                 <Routes>
                     <Route path='/landing' element={<LandingPage />} />
 

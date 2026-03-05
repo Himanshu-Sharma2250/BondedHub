@@ -31,7 +31,7 @@ const ApplyToGroupModal = ({teamId}) => {
 
     // when user apply, it will call application api 
     const onApplyToJoin = async function(data) {
-        applyApplication(teamId, {name: user.name, email: user.email, reasonToJoin: data.reasonToJoin});
+        await applyApplication(teamId, {name: user.name, email: user.email, reasonToJoin: data.reasonToJoin});
         closeModal();
     }
 
@@ -44,9 +44,6 @@ const ApplyToGroupModal = ({teamId}) => {
                 onClick={openModal}
             />
 
-            {/* IMPORTANT: Use 'open:flex' so it only becomes flex when open.
-               The backdrop: class styles the dimmed background behind the modal.
-            */}
             <dialog 
                 ref={dialogRef} 
                 className='open:flex flex-col gap-8 w-90 px-4 py-5 rounded-sm bg-[#F8FAFC] border-t-4 border-t-[#2A6E8C] shadow-xl m-auto backdrop:bg-black/60'
