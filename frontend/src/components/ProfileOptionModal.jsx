@@ -16,9 +16,9 @@ const ProfileOptionModal = ({isCollapsed}) => {
         dialogRef.current?.close();
     };
 
-    const onLogout = () => {
+    const onLogout = async () => {
         try {
-            logout();
+            await logout();
             toast.success("Logout successfull")
         } catch (error) {
             toast.error("Error in logout")
