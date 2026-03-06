@@ -284,7 +284,7 @@ export const forgotPassword = async (req, res) => {
             subject: "Reset Your Password",
             mailgenContent: forgotPasswordMailgenContent(
                 user.name,
-                `${process.env.BASE_URL}/api/v1/auth/reset-password/${unHashedToken}`
+                `${process.env.FRONTEND_BASE_URL}/reset-password/${unHashedToken}`
             )
         });
 
