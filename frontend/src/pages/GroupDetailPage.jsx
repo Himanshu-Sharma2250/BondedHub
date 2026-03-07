@@ -8,12 +8,12 @@ import GroupNotes from '../components/GroupNotes';
 import ApplyToGroupModal from '../components/ApplyToGroupModal';
 import DeleteGroupPopUp from '../components/DeleteGroupPopUp';
 import LeaveGroupModal from '../components/LeaveGroupModal';
-import { useTeamStore } from '../store/useTeamStore';
 import { useAuthStore } from '../store/useAuthStore';
 import { useTeamMemberStore } from '../store/useTeamMemberStore';
+import { useTeam } from '../hooks/useTeamQueries';
 
 const getAvatarColor = (name) => {
-    if (!name) return '#6b7280'; 
+    if (!name) return '#6b7280';
     let hash = 0;
     for (let i = 0; i < name.length; i++) {
         hash = name.charCodeAt(i) + ((hash << 5) - hash);
@@ -24,19 +24,19 @@ const getAvatarColor = (name) => {
 
 const GroupDetailPage = () => {
     const [selectedTab, setSelectedTab] = useState('Overview');
-    const {teamId} = useParams()
-    const {team, loading, getTeam} = useTeamStore();
-    const {user} = useAuthStore();
+    const { teamId } = useParams();
+    const { user } = useAuthStore();
     const { getTeamMember, member, isGetting } = useTeamMemberStore();
+
+    const { data: team, isLoading: teamLoading, error: teamError } = useTeam(teamId);
 
     useEffect(() => {
         if (user?._id && teamId) {
-            getTeam(teamId);
             getTeamMember(teamId, user._id);
         }
-    }, [teamId, user?._id]);
+    }, [teamId, user?._id, getTeamMember]);
 
-    if (loading || isGetting) {
+    if (teamLoading || isGetting) {
         return (
             <div className="flex justify-center items-center py-20">
                 <Loader2 className="w-8 h-8 animate-spin text-[#2A6E8C]" />
@@ -44,10 +44,22 @@ const GroupDetailPage = () => {
         );
     }
 
+    // Handle error 
+    if (teamError || !team) {
+        return (
+            <div className="text-center py-20 text-red-500">
+                <p>Failed to load group details.</p>
+                <NavLink to="/groups" className="text-[#2A6E8C] hover:underline mt-4 inline-block">
+                    Back to Groups
+                </NavLink>
+            </div>
+        );
+    }
+
     return (
-        <div className='pb-1 flex flex-col gap-1'>
-            {/* this div contains back button */}
-            <div className='flex justify-start items-center px-2 h-12'>
+        <div className="pb-1 flex flex-col gap-1">
+            {/* Back button */}
+            <div className="flex justify-start items-center px-2 h-12">
                 <NavLink
                     to="/groups"
                     className="cursor-pointer border-2 px-2 py-1 rounded-xs flex items-center gap-2 hover:gap-3 hover:ease-out text-[#64748B] hover:text-[#2A6E8C] transition-colors"
@@ -57,28 +69,24 @@ const GroupDetailPage = () => {
                 </NavLink>
             </div>
 
-            {/* div 1 - shows group info like group image, name, members number and button to apply */}
-            <div className='flex justify-between items-center py-2 px-3 '>
-                {/* contains group info */}
-                <div className='flex gap-3 items-center'>
-                    <div className='flex items-center justify-center'>
-                        <span className='p-4 bg-cyan-600 rounded-xs' style={{ backgroundColor: getAvatarColor(team?.name) }}>
+            {/* Group header */}
+            <div className="flex justify-between items-center py-2 px-3">
+                <div className="flex gap-3 items-center">
+                    <div className="flex items-center justify-center">
+                        <span
+                            className="p-4 rounded-md text-white font-bold"
+                            style={{ backgroundColor: getAvatarColor(team?.name) }}
+                        >
                             {team?.name?.toUpperCase().slice(0, 1) || 'G'}
                         </span>
                     </div>
-
-                    <div className='flex flex-col'>
-                        <h1 className='text-2xl'>
-                            {team?.name}
-                        </h1>
-
-                        <span>
-                            {team?.totalMembers} members
-                        </span>
+                    <div className="flex flex-col">
+                        <h1 className="text-2xl">{team?.name}</h1>
+                        <span>{team?.totalMembers} members</span>
                     </div>
                 </div>
 
-                {/* contains apply btn and dialog that pop up */}
+                {/* Action buttons based on membership */}
                 <div>
                     {!member && <ApplyToGroupModal teamId={teamId} />}
                     {member?.teamRole === 'MEMBER' && <LeaveGroupModal teamId={teamId} />}
@@ -86,7 +94,7 @@ const GroupDetailPage = () => {
                 </div>
             </div>
 
-            {/* div 2 - shows the btns to navigate between Group Overview - Members - Group History */}
+            {/* Tab navigation */}
             <div className="flex gap-5 py-2 px-2 border-b border-[#CBD5E1]">
                 {['Overview', 'Members', 'Notes', 'History'].map((tab) => (
                     <span
@@ -103,7 +111,7 @@ const GroupDetailPage = () => {
                 ))}
             </div>
 
-            {/* div 2 - shows the respective detail of above navigation btns */}
+            {/* Tab content */}
             <div className="px-2">
                 {selectedTab === 'Overview' && (
                     <GroupOverview team={team} members={team?.members || []} />
@@ -120,7 +128,7 @@ const GroupDetailPage = () => {
                 {selectedTab === 'History' && <GroupHistory teamId={team?._id} />}
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default GroupDetailPage
+export default GroupDetailPage;

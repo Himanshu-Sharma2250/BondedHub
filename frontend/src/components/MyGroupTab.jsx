@@ -2,6 +2,7 @@ import { Loader2, User, Users } from 'lucide-react';
 import React, { useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import { useTeamStore } from '../store/useTeamStore';
+import { useMyTeam } from '../hooks/useTeamQueries';
 
 const getAvatarColor = (name) => {
     if (!name) return '#6b7280';
@@ -14,13 +15,10 @@ const getAvatarColor = (name) => {
 };
 
 const MyGroupTab = () => {
-    const { loading, team, myTeam } = useTeamStore();
+    // const { loading, team, myTeam } = useTeamStore();
+    const { data: team, isLoading, error } = useMyTeam();
 
-    useEffect(() => {
-        myTeam();
-    }, [myTeam]);
-
-    if (loading) {
+    if (isLoading) {
         return (
             <div className="flex justify-center items-center py-20 h-full w-full">
                 <Loader2 className="w-8 h-8 animate-spin text-[#2A6E8C]" />
