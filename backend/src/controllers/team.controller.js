@@ -184,7 +184,7 @@ export const getMyTeam = async (req, res) => {
         const myTeam = await Team.findOne({
             userId: userId,
             isDeleted: false
-        });
+        }).populate('members');
 
         if (myTeam) {
             return res.status(200).json({
@@ -201,7 +201,7 @@ export const getMyTeam = async (req, res) => {
         }).populate({
             path: 'teamId',
             match: { isDeleted: false } // only include if team is not deleted
-        });
+        }).populate('members');
 
         if (membership && membership.teamId) {
             return res.status(200).json({
