@@ -1,36 +1,46 @@
 import Searchbar from '../components/Searchbar'
 import CreateGroupModal from '../components/CreateGroupModal'
-import { useEffect, useState } from 'react';
+import { useMemo, useState } from 'react';
 import AllGroupsTab from '../components/AllGroupsTab';
 import MyGroupTab from '../components/MyGroupTab';
-import { useTeamStore } from '../store/useTeamStore';
+import { useAllTeams } from '../hooks/useTeamQueries';
+import { Loader2 } from 'lucide-react';
 
 const Groups = () => {
     const [selectedTab, setSelectedTab] = useState('All Groups');
-    const { loading, getAllTeams, teams } = useTeamStore();
-    const [filteredTeams, setFilteredTeams] = useState([]);
+    const [searchTerm, setSearchTerm] = useState('');
+    const { data: teams = [], error, isLoading } = useAllTeams();
 
-    useEffect(() => {
-        getAllTeams();
-    }, [getAllTeams]);
+    console.log("team in group ", teams)
 
-    useEffect(() => {
-        setFilteredTeams(teams); // initially show all
-    }, [teams]);
-
-    const handleSearch = (searchTerm) => {
-        if (!searchTerm.trim()) {
-            setFilteredTeams(teams);
-            return;
-        }
+    const filteredTeams = useMemo(() => {
+        if (!searchTerm.trim()) return teams;
         const lowerTerm = searchTerm.toLowerCase();
-        const filtered = teams.filter((group) =>
-            group.name.toLowerCase().includes(lowerTerm) ||
-            group.description.toLowerCase().includes(lowerTerm) ||
-            group.techUsed?.some(tag => tag.toLowerCase().includes(lowerTerm))
+        return teams.filter(
+            (group) =>
+                group.name.toLowerCase().includes(lowerTerm) ||
+                group.description.toLowerCase().includes(lowerTerm) ||
+                group.techUsed?.some((tag) => tag.toLowerCase().includes(lowerTerm))
         );
-        setFilteredTeams(filtered);
+    }, [teams, searchTerm]);
+
+    const handleSearch = (term) => {
+        setSearchTerm(term);
     };
+
+    if (isLoading) {
+        return <div className='flex items-center justify-center h-full w-full'>
+            <Loader2 className='w-8 h-8 animate-spin text-[#2A6E8C]' />
+        </div>
+    }
+
+    if (error) {
+        return (
+            <div className="text-center text-red-500 py-10">
+                Failed to load groups. Please try again later.
+            </div>
+        );
+    }
 
     return (
         <div className='flex flex-col gap-1'>
@@ -76,7 +86,7 @@ const Groups = () => {
                 {selectedTab === "My Group" ? (
                     <MyGroupTab />
                 ) : (
-                    <AllGroupsTab teams={filteredTeams} loading={loading} />
+                    <AllGroupsTab teams={filteredTeams} loading={isLoading} />
                 )}
             </main>
         </div>

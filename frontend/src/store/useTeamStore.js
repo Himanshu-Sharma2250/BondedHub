@@ -6,76 +6,76 @@ export const useTeamStore = create((set) => ({
     teams: [],
     loading: false,
 
-    createTeam: async (teamData) => {
-        set({loading: true});
+    // createTeam: async (teamData) => {
+    //     set({loading: true});
 
-        try {
-            const res = await axiosInstance.post("/team/create-team", teamData);
+    //     try {
+    //         const res = await axiosInstance.post("/team/create-team", teamData);
             
-            set({team: res.data.team});
-            return res.data.team
-        } catch (error) {
-            console.error("Error creating team: ", error);
-        } finally {
-            set({loading: false});
-        }
-    },
+    //         set({team: res.data.team});
+    //         return res.data.team
+    //     } catch (error) {
+    //         console.error("Error creating team: ", error);
+    //     } finally {
+    //         set({loading: false});
+    //     }
+    // },
 
-    getTeam: async (teamId) => {
-        set({loading: true});
+    // getTeam: async (teamId) => {
+    //     set({loading: true});
 
-        try {
-            const res = await axiosInstance.get(`/team/get-team/${teamId}`);
+    //     try {
+    //         const res = await axiosInstance.get(`/team/get-team/${teamId}`);
 
-            set({team: res.data.team})
-            return res.data.team
-        } catch (error) {
-            console.error("Error fetching team: ", error);
-        } finally {
-            set({loading: false});
-        }
-    },
+    //         set({team: res.data.team})
+    //         return res.data.team
+    //     } catch (error) {
+    //         console.error("Error fetching team: ", error);
+    //     } finally {
+    //         set({loading: false});
+    //     }
+    // },
 
-    getAllTeams: async () => {
-        set({loading: true});
+    // getAllTeams: async () => {
+    //     set({loading: true});
 
-        try {
-            const res = await axiosInstance.get("/team/get-all-teams");
+    //     try {
+    //         const res = await axiosInstance.get("/team/get-all-teams");
 
-            set({teams: res.data.teams});
-        } catch (error) {
-            console.error("Error fetching teams: ", error);
-        } finally {
-            set({loading: false});
-        }
-    },
+    //         set({teams: res.data.teams});
+    //     } catch (error) {
+    //         console.error("Error fetching teams: ", error);
+    //     } finally {
+    //         set({loading: false});
+    //     }
+    // },
 
-    deleteTeam: async (teamId) => {
-        set({loading: true});
-        console.log("getting data to delete team is ", teamId)
+    // deleteTeam: async (teamId) => {
+    //     set({loading: true});
+    //     console.log("getting data to delete team is ", teamId)
 
-        try {
-            await axiosInstance.delete(`/team/delete-team/${teamId}`);
+    //     try {
+    //         await axiosInstance.delete(`/team/delete-team/${teamId}`);
 
-            set({team: null});
-        } catch (error) {
-            console.error("Error deleting team: ", error);
-        } finally {
-            set({loading: false});
-        }
-    },
+    //         set({team: null});
+    //     } catch (error) {
+    //         console.error("Error deleting team: ", error);
+    //     } finally {
+    //         set({loading: false});
+    //     }
+    // },
 
-    myTeam: async () => {
-        set({loading: true});
+    // myTeam: async () => {
+    //     set({loading: true});
 
-        try {
-            const res = await axiosInstance.get("/team/my-team")
-            set({team: res.data.team || null})
-        } catch (error) {
-            console.error("Error fetching my team ", error);
-            set({ team: null });
-        } finally {
-            set({loading: false})
-        }
-    }
+    //     try {
+    //         const res = await axiosInstance.get("/team/my-team")
+    //         set({team: res.data.team || null})
+    //     } catch (error) {
+    //         console.error("Error fetching my team ", error);
+    //         set({ team: null });
+    //     } finally {
+    //         set({loading: false})
+    //     }
+    // }
 }))
