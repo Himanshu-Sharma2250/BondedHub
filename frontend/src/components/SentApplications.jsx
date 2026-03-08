@@ -40,7 +40,7 @@ const SentApplications = () => {
                 const { data } = await axiosInstance.get(`/team/get-team/${id}`);
                 return data.team;
             },
-            staleTime: 5 * 60 * 1000, // optional
+            staleTime: 5 * 60 * 1000,
         })),
     });
 

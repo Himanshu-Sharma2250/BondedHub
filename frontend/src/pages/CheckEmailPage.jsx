@@ -1,7 +1,6 @@
 import { Mail, ArrowLeft } from 'lucide-react';
 import { useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
-import Button from '../components/Button';
 import { useAuthStore } from '../store/useAuthStore';
 import toast from 'react-hot-toast';
 

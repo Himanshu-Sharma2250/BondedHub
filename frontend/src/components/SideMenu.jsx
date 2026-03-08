@@ -1,5 +1,4 @@
-import { User, LayoutDashboard, Megaphone, Users, Mail, MoveLeft } from 'lucide-react'
-import React, { useState } from 'react'
+import { LayoutDashboard, Users, Mail, MoveLeft } from 'lucide-react'
 import { NavLink } from 'react-router-dom';
 import ProfileOptionModal from './ProfileOptionModal';
 

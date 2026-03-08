@@ -1,9 +1,9 @@
 import { Loader2, Users } from 'lucide-react';
 import Button from './Button';
 import { NavLink } from 'react-router-dom';
-import { useTeamMemberStore } from '../store/useTeamMemberStore';
 import { useMemberJoinedHistory } from '../hooks/useTeamHistoryQueries';
-import { useUserHistoryStore } from '../store/useUserHistoryStore';
+import { useUserJoinTeam } from '../hooks/useUserHistoryQueries';
+import { useTeamJoin } from '../hooks/useTeamMemberQueries';
 import toast from 'react-hot-toast';
 import {
     useReceivedApplications,
@@ -28,24 +28,29 @@ const ReceivedApplications = () => {
     const acceptMutation = useAcceptApplication();
     const rejectMutation = useRejectApplication();
     const memberJoinedHistoryMutation = useMemberJoinedHistory();
-
-    const { teamJoin } = useTeamMemberStore();
-    const { userJoinedTeam } = useUserHistoryStore();
+    const userJoinTeamMutation = useUserJoinTeam();
+    const teamJoinMutation = useTeamJoin();
 
     const onAcceptApplication = async (application) => {
         try {
             await acceptMutation.mutateAsync(application._id);
             toast.success('Application accepted');
-            await teamJoin(application?.teamId, {
-                name: application?.name,
-                email: application?.email,
-                reasonToJoin: application?.reasonToJoin,
+
+            await teamJoinMutation.mutateAsync({
+                teamId: application?.teamId,
+                data: {
+                    name: application?.name,
+                    email: application?.email,
+                    reasonToJoin: application?.reasonToJoin,
+                },
             });
+
             await memberJoinedHistoryMutation.mutateAsync({
                 teamId: application?.teamId,
                 data: { memberName: application?.name },
             });
-            await userJoinedTeam();
+
+            await userJoinTeamMutation.mutateAsync();
         } catch (error) {
             toast.error('Application accept failed');
         }
@@ -87,7 +92,6 @@ const ReceivedApplications = () => {
             key={application._id}
             className="flex flex-col px-4 py-3 border border-[#CBD5E1] rounded-md bg-white shadow-sm hover:shadow-md transition-shadow"
         >
-            {/* ... (unchanged) ... */}
             <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                     <div>

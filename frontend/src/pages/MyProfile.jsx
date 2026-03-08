@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react'
 import EditProfileModal from '../components/EditProfileModal'
 import { useAuthStore } from '../store/useAuthStore'
-import { useUserHistoryStore } from '../store/useUserHistoryStore';
 import { Loader2 } from 'lucide-react';
 import { useMemo } from 'react';
+import { useUserHistory } from '../hooks/useUserHistoryQueries';
 
 const actionColorMap = {
     CREATED: '#10b981',   // green
@@ -25,15 +25,14 @@ const getAvatarColor = (name) => {
 
 const MyProfile = () => {
     const {profile, user} = useAuthStore();
-    const {loading, getUserHistories, userHistory} = useUserHistoryStore();
+    const {data: userHistory = [], isLoading} = useUserHistory();
 
     useEffect(() => {
         async function getProfile() {
             await profile();
-            await getUserHistories();
         }
         getProfile();
-    }, [getUserHistories, profile])
+    }, [profile])
 
     const formatDate = (dateString) => {
         if (!dateString) return 'N/A';
@@ -300,7 +299,7 @@ const MyProfile = () => {
             <div className="flex flex-col gap-2">
                 <h1 className="text-2xl font-bold">User History</h1>
                 <div className="px-4 py-4 border-2 border-[#CBD5E1] rounded-md bg-[#F8FAFC]">
-                    {loading ? (
+                    {isLoading ? (
                         <div className="flex justify-center items-center py-10">
                             <Loader2 className="w-8 h-8 animate-spin text-[#2A6E8C]" />
                         </div>

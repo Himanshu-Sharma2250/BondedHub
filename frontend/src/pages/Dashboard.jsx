@@ -2,9 +2,6 @@ import { Megaphone, Users, ArrowRight, Loader2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { useAuthStore } from '../store/useAuthStore';
-import { useTeamMemberStore } from '../store/useTeamMemberStore';
-import { useTeamHistoryStore } from '../store/useTeamHistoryStore';
-import { useUserHistoryStore } from '../store/useUserHistoryStore';
 import Button from '../components/Button';
 import { useAllTeams, useMyTeam } from '../hooks/useTeamQueries';
 import {
@@ -13,6 +10,9 @@ import {
     useAcceptApplication,
     useRejectApplication,
 } from '../hooks/useApplicationQueries';
+import { useTeamJoin } from '../hooks/useTeamMemberQueries';
+import { useMemberJoinedHistory } from '../hooks/useTeamHistoryQueries';
+import { useUserJoinTeam } from '../hooks/useUserHistoryQueries';
 import toast from 'react-hot-toast';
 
 const Dashboard = () => {
@@ -31,11 +31,11 @@ const Dashboard = () => {
 
     const acceptMutation = useAcceptApplication();
     const rejectMutation = useRejectApplication();
+    const teamJoinMutation = useTeamJoin();
+    const memberJoinedHistoryMutation = useMemberJoinedHistory();
+    const userJoinTeamMutation = useUserJoinTeam();
 
     const { user } = useAuthStore();
-    const { teamJoin } = useTeamMemberStore();
-    const { memberJoinedHistory } = useTeamHistoryStore();
-    const { userJoinedTeam } = useUserHistoryStore();
 
     const [recommendedGroups, setRecommendedGroups] = useState([]);
 
@@ -52,13 +52,22 @@ const Dashboard = () => {
         try {
             await acceptMutation.mutateAsync(application._id);
             toast.success('Application accepted');
-            await teamJoin(application?.teamId, {
-                name: application?.name,
-                email: application?.email,
-                reasonToJoin: application?.reasonToJoin,
+
+            await teamJoinMutation.mutateAsync({
+                teamId: application?.teamId,
+                data: {
+                    name: application?.name,
+                    email: application?.email,
+                    reasonToJoin: application?.reasonToJoin,
+                },
             });
-            await memberJoinedHistory(application?.teamId, { memberName: application?.name });
-            await userJoinedTeam();
+
+            await memberJoinedHistoryMutation.mutateAsync({
+                teamId: application?.teamId,
+                data: { memberName: application?.name },
+            });
+
+            await userJoinTeamMutation.mutateAsync();
         } catch (error) {
             toast.error('Accept failed');
         }

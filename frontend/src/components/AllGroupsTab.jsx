@@ -1,7 +1,5 @@
 import { Loader2, User, Users } from 'lucide-react';
-import React, { useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
-import { useTeamStore } from '../store/useTeamStore';
 
 // Generate a consistent HSL color from a string (team name)
 const getAvatarColor = (name) => {

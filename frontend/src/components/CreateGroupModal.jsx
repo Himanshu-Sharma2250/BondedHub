@@ -7,8 +7,8 @@ import { Loader2 } from 'lucide-react';
 import { useCreateTeam } from '../hooks/useTeamQueries';
 import { useCreateOwner } from '../hooks/useTeamMemberQueries';
 import { useAuthStore } from '../store/useAuthStore';
-import { useCreateTeamHistory } from '../hooks/useTeamHistoryQueries';
-import { useUserHistoryStore } from '../store/useUserHistoryStore';
+import { useTeamCreateHistory } from '../hooks/useTeamHistoryQueries';
+import { useUserCreateTeam } from '../hooks/useUserHistoryQueries';
 import toast from 'react-hot-toast';
 
 const createTeamSchema = z.object({
@@ -24,9 +24,9 @@ const CreateGroupModal = () => {
     });
     const createTeamMutation = useCreateTeam();
     const createOwnerMutation = useCreateOwner();
-    const createTeamHistoryMutation = useCreateTeamHistory();
+    const createTeamHistoryMutation = useTeamCreateHistory();
+    const userCreateTeamMutation = useUserCreateTeam();
     const { user } = useAuthStore();
-    const { userCreatedTeam } = useUserHistoryStore();
 
     const dialogRef = useRef(null);
 
@@ -54,7 +54,7 @@ const CreateGroupModal = () => {
                     },
                 });
                 await createTeamHistoryMutation.mutateAsync({ teamId: newTeam._id });
-                await userCreatedTeam();
+                await userCreateTeamMutation.mutateAsync();
                 toast.success('Group created successfully!');
                 closeModal();
             }
@@ -63,7 +63,11 @@ const CreateGroupModal = () => {
         }
     };
 
-    const isPending = createTeamMutation.isPending || createOwnerMutation.isPending || createTeamHistoryMutation.isPending;
+    const isPending =
+        createTeamMutation.isPending ||
+        createOwnerMutation.isPending ||
+        createTeamHistoryMutation.isPending ||
+        userCreateTeamMutation.isPending;
 
     return (
         <div>
@@ -78,7 +82,6 @@ const CreateGroupModal = () => {
                 </div>
 
                 <form className="flex flex-col gap-3" onSubmit={handleSubmit(onCreateTeam)}>
-                    {/* ... form fields (unchanged) ... */}
                     <label className="flex flex-col text-sm font-medium">
                         Name
                         <input

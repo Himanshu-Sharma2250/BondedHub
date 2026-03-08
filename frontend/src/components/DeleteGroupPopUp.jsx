@@ -3,13 +3,13 @@ import Button from './Button';
 import { useForm } from 'react-hook-form';
 import { useDeleteTeam } from '../hooks/useTeamQueries';
 import { useTeamDeleteHistory } from '../hooks/useTeamHistoryQueries';
-import { useUserHistoryStore } from '../store/useUserHistoryStore';
+import { useUserDeleteTeam } from '../hooks/useUserHistoryQueries';
 import toast from 'react-hot-toast';
 
 const DeleteGroupPopUp = ({ teamId }) => {
     const deleteTeamMutation = useDeleteTeam();
     const teamDeleteHistoryMutation = useTeamDeleteHistory();
-    const { userDeletedTeam } = useUserHistoryStore();
+    const userDeleteTeamMutation = useUserDeleteTeam();
 
     const { register, handleSubmit, reset } = useForm();
 
@@ -25,7 +25,7 @@ const DeleteGroupPopUp = ({ teamId }) => {
         try {
             await deleteTeamMutation.mutateAsync(teamId);
             await teamDeleteHistoryMutation.mutateAsync({ teamId, data: { reason: data.reason } });
-            await userDeletedTeam({ reason: data.reason });
+            await userDeleteTeamMutation.mutateAsync({ reason: data.reason });
             toast.success('Team Deleted');
             closeModal();
         } catch (error) {
@@ -75,11 +75,21 @@ const DeleteGroupPopUp = ({ teamId }) => {
                             onClick={closeModal}
                         />
                         <Button
-                            name={deleteTeamMutation.isPending || teamDeleteHistoryMutation.isPending ? 'Deleting...' : 'Delete'}
+                            name={
+                                deleteTeamMutation.isPending ||
+                                teamDeleteHistoryMutation.isPending ||
+                                userDeleteTeamMutation.isPending
+                                    ? 'Deleting...'
+                                    : 'Delete'
+                            }
                             bgColor="#FF7A59"
                             btnSize="16px"
                             type="submit"
-                            disabled={deleteTeamMutation.isPending || teamDeleteHistoryMutation.isPending}
+                            disabled={
+                                deleteTeamMutation.isPending ||
+                                teamDeleteHistoryMutation.isPending ||
+                                userDeleteTeamMutation.isPending
+                            }
                         />
                     </div>
                 </form>

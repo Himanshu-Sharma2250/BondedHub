@@ -2,7 +2,7 @@ import { useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTeamLeft } from '../hooks/useTeamMemberQueries';
 import { useMemberLeftHistory } from '../hooks/useTeamHistoryQueries';
-import { useUserHistoryStore } from '../store/useUserHistoryStore';
+import { useUserLeftTeam } from '../hooks/useUserHistoryQueries';
 import { useAuthStore } from '../store/useAuthStore';
 import Button from './Button';
 import toast from 'react-hot-toast';
@@ -10,7 +10,7 @@ import toast from 'react-hot-toast';
 const LeaveGroupModal = ({ teamId }) => {
     const teamLeftMutation = useTeamLeft();
     const memberLeftHistoryMutation = useMemberLeftHistory();
-    const { userLeftTeam } = useUserHistoryStore();
+    const userLeftTeamMutation = useUserLeftTeam();
     const { user } = useAuthStore();
 
     const { register, handleSubmit, reset } = useForm({
@@ -32,7 +32,7 @@ const LeaveGroupModal = ({ teamId }) => {
                 teamId,
                 data: { reason: data.reason, memberName: user?.fullName },
             });
-            await userLeftTeam({ reason: data.reason });
+            await userLeftTeamMutation.mutateAsync({ reason: data.reason });
             toast.success('You left the team');
             closeModal();
         } catch (error) {
@@ -87,11 +87,21 @@ const LeaveGroupModal = ({ teamId }) => {
                             onClick={closeModal}
                         />
                         <Button
-                            name={teamLeftMutation.isPending || memberLeftHistoryMutation.isPending ? 'Leaving...' : 'Leave'}
+                            name={
+                                teamLeftMutation.isPending ||
+                                memberLeftHistoryMutation.isPending ||
+                                userLeftTeamMutation.isPending
+                                    ? 'Leaving...'
+                                    : 'Leave'
+                            }
                             bgColor="#FF7A59"
                             btnSize="16px"
                             type="submit"
-                            disabled={teamLeftMutation.isPending || memberLeftHistoryMutation.isPending}
+                            disabled={
+                                teamLeftMutation.isPending ||
+                                memberLeftHistoryMutation.isPending ||
+                                userLeftTeamMutation.isPending
+                            }
                         />
                     </div>
                 </form>
