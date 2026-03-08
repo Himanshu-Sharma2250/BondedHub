@@ -11,8 +11,6 @@ const Groups = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const { data: teams = [], error, isLoading } = useAllTeams();
 
-    console.log("team in group ", teams)
-
     const filteredTeams = useMemo(() => {
         if (!searchTerm.trim()) return teams;
         const lowerTerm = searchTerm.toLowerCase();

@@ -9,8 +9,8 @@ import ApplyToGroupModal from '../components/ApplyToGroupModal';
 import DeleteGroupPopUp from '../components/DeleteGroupPopUp';
 import LeaveGroupModal from '../components/LeaveGroupModal';
 import { useAuthStore } from '../store/useAuthStore';
-import { useTeamMemberStore } from '../store/useTeamMemberStore';
 import { useTeam } from '../hooks/useTeamQueries';
+import { useTeamMember } from '../hooks/useTeamMemberQueries';
 
 const getAvatarColor = (name) => {
     if (!name) return '#6b7280';
@@ -26,17 +26,15 @@ const GroupDetailPage = () => {
     const [selectedTab, setSelectedTab] = useState('Overview');
     const { teamId } = useParams();
     const { user } = useAuthStore();
-    const { getTeamMember, member, isGetting } = useTeamMemberStore();
 
     const { data: team, isLoading: teamLoading, error: teamError } = useTeam(teamId);
 
-    useEffect(() => {
-        if (user?._id && teamId) {
-            getTeamMember(teamId, user._id);
-        }
-    }, [teamId, user?._id, getTeamMember]);
+    const { data: member, isLoading: memberLoading, error: memberError } = useTeamMember(
+        teamId,
+        user?._id
+    );
 
-    if (teamLoading || isGetting) {
+    if (teamLoading || memberLoading) {
         return (
             <div className="flex justify-center items-center py-20">
                 <Loader2 className="w-8 h-8 animate-spin text-[#2A6E8C]" />
@@ -44,7 +42,6 @@ const GroupDetailPage = () => {
         );
     }
 
-    // Handle error 
     if (teamError || !team) {
         return (
             <div className="text-center py-20 text-red-500">
@@ -121,7 +118,7 @@ const GroupDetailPage = () => {
                         teamId={team?._id}
                         teamRole={member?.teamRole}
                         members={team?.members || []}
-                        loading={isGetting}
+                        loading={memberLoading}
                     />
                 )}
                 {selectedTab === 'Notes' && <GroupNotes teamId={teamId} member={member} />}
