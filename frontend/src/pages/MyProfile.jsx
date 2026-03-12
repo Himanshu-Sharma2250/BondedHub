@@ -214,9 +214,9 @@ const MyProfile = () => {
                                 Website
                             </span>
 
-                            <span className='w-145'>
+                            <a href={user.website || '#'} target="_blank" className='w-145'>
                                 {user.website || "NA"}
-                            </span>
+                            </a>
                         </div>
                     </div>
 
@@ -228,9 +228,9 @@ const MyProfile = () => {
                                 Linkedin
                             </span>
 
-                            <span className='w-145'>
+                            <a href={user.linkedln || '#'} target="_blank" className='w-145'>
                                 {user.linkedln || "NA"}
-                            </span>
+                            </a>
                         </div>
 
                         {/* github */}
@@ -239,9 +239,9 @@ const MyProfile = () => {
                                 Github
                             </span>
 
-                            <span className='w-145'>
+                            <a href={user.github || '#'} target="_blank" className='w-145'>
                                 {user.github || "NA"}
-                            </span>
+                            </a>
                         </div>
                     </div>
 
@@ -253,9 +253,9 @@ const MyProfile = () => {
                                 Twitter/X
                             </span>
 
-                            <span className='w-145'>
+                            <a href={user.twitter || '#'} target="_blank" className='w-145'>
                                 {user.twitter || "NA"}
-                            </span>
+                            </a>
                         </div>
 
                         {/* hashnode */}
@@ -264,9 +264,9 @@ const MyProfile = () => {
                                 hashnode
                             </span>
 
-                            <span className='w-145'>
+                            <a href={user.hashnode || '#'} target="_blank" className='w-145'>
                                 {user.hashnode || "NA"}
-                            </span>
+                            </a>
                         </div>
                     </div>
 
@@ -278,9 +278,9 @@ const MyProfile = () => {
                                 Medium
                             </span>
 
-                            <span className='w-145'>
+                            <a href={user.medium || '#'} target="_blank" className='w-145'>
                                 {user.medium || "NA"}
-                            </span>
+                            </a>
                         </div>
 
                         {/* leetcode */}
@@ -289,9 +289,9 @@ const MyProfile = () => {
                                 Leetcode
                             </span>
 
-                            <span className='w-145'>
+                            <a href={user.leetcode || '#'} target="_blank" className='w-145'>
                                 {user.leetcode || "NA"}
-                            </span>
+                            </a>
                         </div>
                     </div>
                 </div>

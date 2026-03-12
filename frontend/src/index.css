@@ -3,7 +3,9 @@
 @import 'tailwind-scrollbar-hide/v4';
 
 body {
-    font-family: 'JetBrains Mono';
+    /* font-family: 'Big Shoulders Inline', cursive; */
+    /* font-family: 'Karla', sans-serif; */
+    font-family: 'Roboto Mono', monospace;
 }
 
 .hide-scrollbar::-webkit-scrollbar {
