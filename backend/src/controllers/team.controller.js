@@ -14,17 +14,6 @@ export const createTeam = async (req, res) => {
     }
 
     const {name, description, totalMembers, techUsed} = data;
-    const techs = [];
-    let tag = "";
-
-    for (let i = 0; i < techUsed.length; i++) {
-        let c = techUsed[i];
-        tag = tag + c;
-        if (c === ' ' || i === techUsed.length-1) {
-            techs.push(tag);
-            tag = ''
-        }
-    }
 
     try {
         const existingTeam = await Team.findOne({
@@ -58,7 +47,7 @@ export const createTeam = async (req, res) => {
             description: description,
             totalMembers: totalMembers,
             isDeleted: false,
-            techUsed: techs
+            techUsed: techUsed
         })
 
         await team.save();
@@ -201,7 +190,7 @@ export const getMyTeam = async (req, res) => {
         }).populate({
             path: 'teamId',
             match: { isDeleted: false } // only include if team is not deleted
-        }).populate('members');
+        });
 
         if (membership && membership.teamId) {
             return res.status(200).json({
