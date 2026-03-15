@@ -125,7 +125,6 @@ export const verifyEmail = async function (req, res) {
             sameSite: process.env.NODE_ENV === "production" ? 'none' : 'lax'
         }
 
-        // clear any previous tokens
         res.status(200)
             .clearCookie("AccessToken", cookieOption)
             .clearCookie("RefreshToken", cookieOption)
@@ -408,8 +407,18 @@ export const getProfile = async (req, res) => {
 }
 
 export const resendEmailVerification = async (req, res) => {
+    // get email from request body instead of req.user
+    const { email } = req.body;
+
+    if (!email) {
+        return res.status(400).json({
+            success: false,
+            message: "Email is required"
+        })
+    }
+
     try {
-        const user = await User.findById(req.user?._id);
+        const user = await User.findOne({ email });
 
         if (!user) {
             return res.status(404).json({
@@ -567,10 +576,13 @@ export const editProfile = async (req, res) => {
 }
 
 export const getUserProfile = async (req, res) => {
-    const { userId } = req.params;
+    const { name } = req.params;
+    console.log("name in user profile ", name )
 
     try {
-        const user = await User.findById(userId);
+        const user = await User.findOne({ name }).select(
+            "-password -refreshToken -emailVerificationToken -emailVerificationExpiry -forgetPasswordToken -forgetPasswordExpiry"
+        );
 
         if (!user) {
             return res.status(404).json({

@@ -1,11 +1,12 @@
 import express from "express";
 
 import { verifyJWT } from "../middlewares/auth.middleware.js";
-import { getUserHistories, userCreatedTeam, userDeletedTeam, userJoinedTeam, userKickedOutOfTeam, userLeftTeam } from "../controllers/user_history.controller.js";
+import { getOtherUserHistory, getUserHistories, userCreatedTeam, userDeletedTeam, userJoinedTeam, userKickedOutOfTeam, userLeftTeam } from "../controllers/user_history.controller.js";
 
 const userHistoryRouter = express.Router();
 
 userHistoryRouter.get("/", verifyJWT, getUserHistories);
+userHistoryRouter.get("/:userId", verifyJWT, getOtherUserHistory);
 userHistoryRouter.post("/user-joined-team", verifyJWT, userJoinedTeam);
 userHistoryRouter.post("/user-created-team", verifyJWT, userCreatedTeam);
 userHistoryRouter.post("/user-left-team", verifyJWT, userLeftTeam);

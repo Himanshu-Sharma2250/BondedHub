@@ -4,7 +4,7 @@ import { joinTeamSchema, teamOwnerSchema } from "../validators/team.validator.js
 
 // join a team - create team member
 export const joinTeam = async (req, res) => {
-    const {teamId} = req.params;
+    const {teamId, userId} = req.params;
     const {data, error} = joinTeamSchema.safeParse(req.body);
 
     if (error) {
@@ -19,7 +19,7 @@ export const joinTeam = async (req, res) => {
     try {
         // checking if user is a member of another team
         const joinedAnotherTeam = await TeamMember.findOne({
-            userId: req.user._id,
+            userId: userId,
             active: true
         })
 
@@ -32,7 +32,7 @@ export const joinTeam = async (req, res) => {
 
         // check if user is a leader of another team
         const leaderOfTeam = await Team.findOne({
-            userId: req.user._id
+            userId: userId
         })
 
         if (leaderOfTeam) {
@@ -65,7 +65,7 @@ export const joinTeam = async (req, res) => {
         }
 
         const alreadyJoined = await TeamMember.findOne({
-            userId: req.user._id,
+            userId: userId,
             teamId: teamId,
         })
 
@@ -77,7 +77,7 @@ export const joinTeam = async (req, res) => {
         }
 
         const teamMember = await TeamMember.create({
-            userId: req.user._id,
+            userId: userId,
             teamId: teamId,
             name: name,
             email: email,
@@ -94,12 +94,12 @@ export const joinTeam = async (req, res) => {
         await teamMember.save();
 
         const existingTeamMember = await TeamMember.findOne({
-            userId: req.user._id,
+            userId: userId,
             teamId: teamId
         })
 
         if (!existingTeamMember) {
-            return res.status(400).json({
+            return res.status(404).json({
                 success: false,
                 message: "Team member not found"
             })

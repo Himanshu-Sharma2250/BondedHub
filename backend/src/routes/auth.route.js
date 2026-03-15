@@ -15,6 +15,6 @@ authRouter.post("/reset-password/:token", resetForgottenPassword);
 authRouter.post("/refresh-token", refreshAccessToken);
 authRouter.post("/resend-email-verification", resendEmailVerification);
 authRouter.patch("/edit", verifyJWT, editProfile);
-authRouter.get("/get-profile/:userId", verifyJWT, getUserProfile);
+authRouter.get("/get-profile/:name", verifyJWT, getUserProfile);
 
 export default authRouter;

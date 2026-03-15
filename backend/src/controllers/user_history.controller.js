@@ -277,3 +277,32 @@ export const getUserHistories = async (req, res) => {
         })
     }
 }
+
+export const getOtherUserHistory = async (req, res) => {
+    const {userId} = req.params;
+
+    try {
+        const history = await UserHistory.find({
+            userId: userId
+        })
+
+        if (!history) {
+            return res.status(404).json({
+                success: false,
+                message: "History Not found"
+            })
+        }
+
+        res.status(200).json({
+            success: true,
+            message: "User history fetched successfully",
+            history
+        })
+    } catch (error) {
+        console.log("Error fetching other user histories: ", error);
+        res.status(500).json({
+            success: false,
+            message: "Error fetching other user histories"
+        })
+    }
+}
