@@ -73,10 +73,10 @@ const Navbar = () => {
                 {/* Desktop navigation links (hidden on mobile) */}
                 <div className="hidden md:block">
                     <ul className="flex items-center gap-8">
-                        <li><a href="#" className="text-base-content/70 hover:text-primary text-lg">Home</a></li>
-                        <li><a href="#" className="text-base-content/70 hover:text-primary text-lg">Teams</a></li>
-                        <li><a href="#" className="text-base-content/70 hover:text-primary text-lg">About Us</a></li>
-                        <li><a href="#" className="text-base-content/70 hover:text-primary text-lg">Contact</a></li>
+                        <li><a href="/" className="text-base-content/70 hover:text-primary text-lg">Home</a></li>
+                        <li><a href="/groups" className="text-base-content/70 hover:text-primary text-lg">Teams</a></li>
+                        <li><a href="/about" className="text-base-content/70 hover:text-primary text-lg">About Us</a></li>
+                        {/* <li><a href="#" className="text-base-content/70 hover:text-primary text-lg">Contact</a></li> */}
                     </ul>
                 </div>
 

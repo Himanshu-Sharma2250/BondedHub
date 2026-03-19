@@ -20,6 +20,7 @@ import VerifyEmailPage from './pages/VerifyEmailPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import ResetPasswordPage from './pages/ResetPasswordPage';
 import ProtectedRoute from './components/ProtectedRoute';
+import AboutUs from './pages/AboutUs';
 
 function App() {
     const { data: user, isLoading, error } = useProfile();
@@ -43,6 +44,7 @@ function App() {
                 <Routes>
                     {/* Public routes */}
                     <Route path="/" element={<LandingPage />} />
+                    <Route path="/about" element={<AboutUs />} />
                     <Route
                         path="/signup"
                         element={user ? <Navigate to="/dashboard" replace /> : <SignUpPage />}
