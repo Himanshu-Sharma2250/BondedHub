@@ -112,7 +112,7 @@ const ReceivedApplications = () => {
                         <span className="text-sm text-base-content/70">{application?.email}</span>
                     </div>
                 </div>
-                <NavLink to={`/user/${application?.userId}`}>
+                <NavLink to={`/user/${application?.name}`}>
                     <Button name="View Profile" variant="primary" size="sm" />
                 </NavLink>
             </div>
