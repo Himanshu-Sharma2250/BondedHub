@@ -6,7 +6,7 @@ const sendEmail = async (options) => {
     const mailGenerator = new Mailgen({
         theme: "default",
         product: {
-            name: "Bonded",
+            name: "BondedHub",
             link: "https://bondedhub.in",
         },
     });
