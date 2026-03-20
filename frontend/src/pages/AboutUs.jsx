@@ -53,7 +53,7 @@ export default function AboutUs() {
                         
                         <div className="hero-reveal mt-12 md:pl-24 w-full md:w-[70%] lg:w-[50%]">
                             <p className="text-xl md:text-2xl text-base-content/80 font-light leading-relaxed border-l-[3px] border-primary pl-6 py-2">
-                                Bonded is a radical experiment in human connection. We don't just match profiles; we align frequencies, ideas, and passions in a fragmented digital world.
+                                BondedHub is a radical experiment in human connection. We don't just match profiles; we align frequencies, ideas, and passions in a fragmented digital world.
                             </p>
                         </div>
                     </div>
@@ -69,7 +69,7 @@ export default function AboutUs() {
                             <Users className="w-12 h-12 text-primary mb-8" strokeWidth={1.5} />
                             <h3 className="text-3xl font-bold mb-4">The Collective</h3>
                             <p className="text-base-content/70 leading-relaxed text-lg font-light">
-                                We believe great ideas die in isolation. Bonded exists to bridge the gap between "I have an idea" and "we built a movement." Find co-founders, collaborators, and comrades instantly.
+                                We believe great ideas die in isolation. BondedHub exists to bridge the gap between "I have an idea" and "we built a movement." Find co-founders, collaborators, and comrades instantly.
                             </p>
                         </div>
 
@@ -108,7 +108,7 @@ export default function AboutUs() {
                             </h2>
                             <div className="w-32 h-0.5 bg-accent mx-auto mb-8" />
                             <p className="text-xl md:text-2xl text-base-content/70 font-light max-w-2xl mx-auto">
-                                Bonded isn't trying to be "another social network." We are a utility for human assembly. We thrive on the weird, the passionate, and the driven. 
+                                BondedHub isn't trying to be "another social network." We are a utility for human assembly. We thrive on the weird, the passionate, and the driven. 
                             </p>
                         </div>
 

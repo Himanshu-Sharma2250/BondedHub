@@ -78,7 +78,7 @@ const LandingPage = () => {
                 {/* Background Massive Text */}
                 <div className="hero-bg-text absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full text-center opacity-5 dark:opacity-5 pointer-events-none select-none z-0">
                     <h1 className="text-[20vw] font-black uppercase leading-none overflow-hidden whitespace-nowrap">
-                        BONDED BONDED
+                        BONDEDHUB BONDEDHUB
                     </h1>
                 </div>
 
@@ -193,8 +193,8 @@ const LandingPage = () => {
             {/* FOOTER  */}
             <footer className='relative z-10 bg-base-300/30 border-t border-base-300 pt-32 pb-12 overflow-hidden mt-32'>
                 <div className="max-w-7xl mx-auto px-4 text-center">
-                    <h2 className="footer-massive text-[18vw] font-black uppercase leading-[0.75] text-transparent bg-clip-text bg-linear-to-b from-base-content/80 to-base-content/10 mb-8 transition-transform hover:scale-105 duration-700">
-                        BONDED.
+                    <h2 className="footer-massive text-[16vw] font-black uppercase leading-[0.75] text-transparent bg-clip-text bg-linear-to-b from-base-content/80 to-base-content/10 mb-8 transition-transform hover:scale-105 duration-700">
+                        BONDEDHUB.
                     </h2>
                     <p className='text-base-content/60 font-light tracking-widest uppercase'>Thanks for using 😸</p>
                 </div>

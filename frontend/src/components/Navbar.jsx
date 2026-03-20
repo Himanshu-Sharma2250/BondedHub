@@ -67,7 +67,7 @@ const Navbar = () => {
 
                 {/* Logo: centered on mobile, left-aligned on desktop */}
                 <div className="flex-1 text-center md:text-left md:flex-none">
-                    <h1 className="text-2xl font-bold text-base-content md:text-3xl">Bonded</h1>
+                    <h1 className="text-2xl font-bold text-base-content md:text-3xl">BondedHub</h1>
                 </div>
 
                 {/* Desktop navigation links (hidden on mobile) */}

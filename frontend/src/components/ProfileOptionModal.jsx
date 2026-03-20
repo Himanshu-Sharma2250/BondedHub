@@ -1,4 +1,4 @@
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { useRef, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { User, Moon, Sun } from 'lucide-react';
@@ -11,6 +11,7 @@ const ProfileOptionModal = ({ isCollapsed }) => {
     const { data: user } = useProfile();
     const logoutMutation = useLogout();
     const { theme, toggleTheme } = useTheme();
+    const navigate = useNavigate();
 
     const openModal = () => {
         dialogRef.current?.showModal();
@@ -36,6 +37,7 @@ const ProfileOptionModal = ({ isCollapsed }) => {
             await logoutMutation.mutateAsync();
             toast.success('Logout successful');
             closeModal();
+            navigate("/")
         } catch (error) {
             toast.error('Error in logout');
         }
