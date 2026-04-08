@@ -17,6 +17,7 @@ dotenv.config();
 const app = express()
 const port = process.env.PORT || 8000;
 const FRONTEND_URL = process.env.FRONTEND_BASE_URL || 'https://www.bondedhub.in';
+console.log("cors frontend url : ", FRONTEND_URL)
 
 const corsOptions = {
   origin: function (origin, callback) {
@@ -37,8 +38,6 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
-
-app.options('*', cors(corsOptions));
 
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
