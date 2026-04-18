@@ -15,7 +15,7 @@ const createTeamSchema = z.object({
     name: z.string().trim().min(1, 'Name is required'),
     description: z.string().trim().min(1, 'Description is required'),
     totalMembers: z.coerce.number().min(1, 'At least 1 member required'),
-    techUsed: z.string().trim(),
+    techUsed: z.array(z.string()),
 });
 
 const CreateGroupModal = () => {
