@@ -4,7 +4,7 @@ export const createTeamSchema = z.object({
     name: z.string().trim(),
     description: z.string().trim(),
     totalMembers: z.number(),
-    techUsed: z.string().trim()
+    techUsed: z.array(z.string())
 })
 
 export const joinTeamSchema = z.object({

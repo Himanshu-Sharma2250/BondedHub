@@ -32,7 +32,8 @@ export const joinTeam = async (req, res) => {
 
         // check if user is a leader of another team
         const leaderOfTeam = await Team.findOne({
-            userId: userId
+            userId: userId,
+            isDeleted: false
         })
 
         if (leaderOfTeam) {
@@ -169,6 +170,7 @@ export const leftTeam = async (req, res) => {
 // kicked out of a team
 export const kickedOutOfTeam = async (req, res) => {
     const {teamId} = req.params;
+    const {memberId} = req.body;
 
     try {
         const alreadyKickedOutFromTeam = await TeamMember.findOne({
@@ -199,7 +201,7 @@ export const kickedOutOfTeam = async (req, res) => {
             })
         }
 
-        const kickOutTeamMember = await TeamMember.findByIdAndUpdate(teamId,
+        const kickOutTeamMember = await TeamMember.findByIdAndUpdate(memberId,
             {active: false, memberAction: 'KICKED_OUT'},
             {new: true}
         );

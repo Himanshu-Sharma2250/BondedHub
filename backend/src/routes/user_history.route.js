@@ -7,10 +7,10 @@ const userHistoryRouter = express.Router();
 
 userHistoryRouter.get("/", verifyJWT, getUserHistories);
 userHistoryRouter.get("/:userId", verifyJWT, getOtherUserHistory);
-userHistoryRouter.post("/user-joined-team", verifyJWT, userJoinedTeam);
+userHistoryRouter.post("/user-joined-team/:userId", verifyJWT, userJoinedTeam);
 userHistoryRouter.post("/user-created-team", verifyJWT, userCreatedTeam);
 userHistoryRouter.post("/user-left-team", verifyJWT, userLeftTeam);
-userHistoryRouter.post("/user-kicked-out-team", verifyJWT, userKickedOutOfTeam);
+userHistoryRouter.post("/user-kicked-out-team/:name", verifyJWT, userKickedOutOfTeam);
 userHistoryRouter.post("/user-delete-team", verifyJWT, userDeletedTeam);
 
 export default userHistoryRouter;

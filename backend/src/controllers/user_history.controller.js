@@ -2,6 +2,7 @@ import { Team } from "../models/team.model.js";
 import { TeamMember } from "../models/team_member.model.js";
 import { UserHistory } from "../models/user_history.model.js";
 import { userHistorySchema } from "../validators/history.validator.js";
+import { User } from "../models/user.model.js";
 
 export const userCreatedTeam = async (req, res) => {
     const username = req.user.name;
@@ -41,8 +42,8 @@ export const userCreatedTeam = async (req, res) => {
 }
 
 export const userJoinedTeam = async (req, res) => {
-    const username = req.user.name;
-    const userId = req.user._id;
+    // const username = req.user.name;
+    const {userId} = req.params;
 
     try {
         const membership = await TeamMember.findOne({
@@ -50,7 +51,7 @@ export const userJoinedTeam = async (req, res) => {
             active: true
         }).populate({
             path: 'teamId',
-            match: { isDeleted: false } // only include if team is not deleted
+            match: { isDeleted: false } 
         });
 
         if (!membership) {
@@ -73,7 +74,7 @@ export const userJoinedTeam = async (req, res) => {
             userId: req.user._id,
             userAction: "JOINED",
             title: "Joined Team",
-            description: `${username} joined team ${team.name}`
+            description: `${membership.name} joined team ${team.name}`
         })
     
         res.status(201).json({
@@ -149,21 +150,27 @@ export const userLeftTeam = async (req, res) => {
 
 export const userKickedOutOfTeam = async (req, res) => {
     const {data, error} = userHistorySchema.safeParse(req.body);
-    const username = req.user.name;
-    const userId = req.user._id;
+    // const username = req.user.name;
+    // const userId = req.user._id;
+    const {name} = req.params;
     
     if (error) {
         return res.status(400).json({
             success: false,
-            message: "Error in req body"
+            message: "Error in req body",
+            error: error
         })
     }
     
     const {reason} = data;
 
     try {
+        const user = await User.findOne({
+            name: name
+        })
+
         const membership = await TeamMember.findOne({
-            userId: userId,
+            userId: user._id,
             active: false
         })
 
@@ -184,10 +191,10 @@ export const userKickedOutOfTeam = async (req, res) => {
         }
 
         const history = await UserHistory.create({
-            userId: req.user._id,
+            userId: user._id,
             userAction: "KICKED_OUT",
             title: "Kicked Out of Team",
-            description: `${username} kicked out of team ${team.name} because ${reason}`
+            description: `${membership.name} kicked out of team ${team.name} because ${reason}`
         })
     
         res.status(201).json({

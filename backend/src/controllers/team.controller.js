@@ -80,59 +80,65 @@ export const createTeam = async (req, res) => {
 
 // get a team
 export const getTeam = async (req, res) => {
-    const {teamId} = req.params;
+    const { teamId } = req.params;
 
     try {
-        const team = await Team.findById(teamId).populate('members');
+        const team = await Team.findById(teamId).populate({
+            path: 'members',
+            match: { active: true }      // Only active members
+        });
 
         if (!team) {
             return res.status(404).json({
                 success: false,
                 message: "Team not found"
-            })
+            });
         }
 
         res.status(200).json({
             success: true,
             message: "Team",
             team
-        })
+        });
     } catch (error) {
         console.error("Error getting team", error);
         res.status(500).json({
             success: false,
             message: "Error getting team"
-        })
+        });
     }
-}
+};
 
 // get all teams which are not deleted
 export const getAllTeams = async (req, res) => {
     try {
         const teams = await Team.find({
             isDeleted: false
-        }).populate('members')
+        }).populate({
+            path: 'members',
+            match: { active: true }      // Only active members
+        });
 
         if (!teams) {
             return res.status(400).json({
                 success: false,
                 message: "No teams found"
-            })
+            });
         }
 
         res.status(200).json({
             success: true,
             message: "Teams",
             teams
-        })
+        });
     } catch (error) {
         console.error("Error getting teams", error);
         res.status(500).json({
             success: false,
             message: "Error getting teams"
-        })
+        });
     }
-}
+};
 
 // delete team
 export const deleteTeam = async (req, res) => {
@@ -169,11 +175,14 @@ export const getMyTeam = async (req, res) => {
     const userId = req.user._id;
 
     try {
-        // 1. Check if user is the owner of a non-deleted team
+        // 1. Owner branch – team with active members only
         const myTeam = await Team.findOne({
             userId: userId,
             isDeleted: false
-        }).populate('members');
+        }).populate({
+            path: 'members',
+            match: { active: true }
+        });
 
         if (myTeam) {
             return res.status(200).json({
@@ -183,13 +192,17 @@ export const getMyTeam = async (req, res) => {
             });
         }
 
-        // 2. If not owner, check if user is an active member of any team
+        // 2. Member branch – find active membership and populate team with active members
         const membership = await TeamMember.findOne({
             userId: userId,
             active: true
         }).populate({
             path: 'teamId',
-            match: { isDeleted: false } // only include if team is not deleted
+            match: { isDeleted: false },
+            populate: {
+                path: 'members',
+                match: { active: true }
+            }
         });
 
         if (membership && membership.teamId) {
